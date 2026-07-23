@@ -1,0 +1,11 @@
+[package]
+name = "renamer"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "ScrapeX rename templates and rule engine (stub in M0)"
+
+[dependencies]
+media-core.workspace = true
+serde.workspace = true
+thiserror.workspace = true

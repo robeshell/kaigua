@@ -1,0 +1,11 @@
+[package]
+name = "scraper-kit"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "ScrapeX scrapers and matching engine (stub in M0)"
+
+[dependencies]
+media-core.workspace = true
+serde.workspace = true
+thiserror.workspace = true

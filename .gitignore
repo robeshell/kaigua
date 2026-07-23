@@ -1,0 +1,22 @@
+# Rust
+/target/
+**/target/
+
+# Node / Vite / Tauri
+node_modules/
+dist/
+dist-ssr/
+*.local
+.vite/
+desktop/dist/
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json

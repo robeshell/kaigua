@@ -1,0 +1,19 @@
+[package]
+name = "media-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "ScrapeX domain: models, SQLite, filesystem, scanning primitives"
+
+[dependencies]
+anyhow.workspace = true
+chrono.workspace = true
+rusqlite.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
+uuid.workspace = true
+
+[dev-dependencies]
+tempfile = "3"
