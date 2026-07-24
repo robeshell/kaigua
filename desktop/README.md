@@ -1,4 +1,4 @@
-# ScrapeX Desktop (Tauri 2)
+# kaigua Desktop (Tauri 2)
 
 跨平台桌面壳。Swift 原版仍保留在仓库根目录 `App/` / `Packages/`，作行为规格。
 

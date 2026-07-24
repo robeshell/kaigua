@@ -1,0 +1,84 @@
+use chrono::{DateTime, Utc};
+use rusqlite::{params, OptionalExtension};
+
+use crate::models::{MediaItem, MediaType, ScrapedStatus};
+use crate::DatabaseError;
+
+use super::AppDatabase;
+
+#[derive(Debug, Clone, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct MediaMetaSummary {
+    pub media_item_id: String,
+    pub poster_path: Option<String>,
+    pub fanart_path: Option<String>,
+    pub overview: Option<String>,
+    pub rating: Option<f64>,
+    pub genres: Vec<String>,
+}
+
+impl AppDatabase {
+    pub fn list_metadata_summaries(
+        &self,
+        library_id: &str,
+    ) -> Result<Vec<MediaMetaSummary>, DatabaseError> {
+        self.with_conn(|conn| {
+            let mut stmt = conn.prepare(
+                "SELECT m.mediaItemId, m.posterPath, m.fanartPath, m.overview, m.rating, m.genres
+                 FROM media_metadata m
+                 INNER JOIN media_items i ON i.id = m.mediaItemId
+                 WHERE i.libraryId = ?1",
+            )?;
+            let rows = stmt.query_map(params![library_id], |row| {
+                let genres_json: String = row.get(5)?;
+                Ok(MediaMetaSummary {
+                    media_item_id: row.get(0)?,
+                    poster_path: row.get(1)?,
+                    fanart_path: row.get(2)?,
+                    overview: row.get(3)?,
+                    rating: row.get(4)?,
+                    genres: serde_json::from_str(&genres_json).unwrap_or_default(),
+                })
+            })?;
+            let mut out = Vec::new();
+            for row in rows {
+                out.push(row?);
+            }
+            Ok(out)
+        })
+    }
+
+    pub fn get_media_item(&self, id: &str) -> Result<Option<MediaItem>, DatabaseError> {
+        self.with_conn(|conn| {
+            conn.query_row(
+                "SELECT id, type, title, originalTitle, year, folderPath, filePath,
+                        bookmarkData, status, scrapeIssue, libraryId, addedAt
+                 FROM media_items WHERE id = ?1",
+                [id],
+                |row| {
+                    let media_type: String = row.get(1)?;
+                    let status: String = row.get(8)?;
+                    let added_at: String = row.get(11)?;
+                    Ok(MediaItem {
+                        id: row.get(0)?,
+                        media_type: MediaType::parse(&media_type).unwrap_or(MediaType::Movie),
+                        title: row.get(2)?,
+                        original_title: row.get(3)?,
+                        year: row.get(4)?,
+                        folder_path: row.get(5)?,
+                        file_path: row.get(6)?,
+                        bookmark_data: row.get(7)?,
+                        status: ScrapedStatus::parse(&status).unwrap_or(ScrapedStatus::Unscraped),
+                        scrape_issue: row.get(9)?,
+                        library_id: row.get(10)?,
+                        added_at: DateTime::parse_from_rfc3339(&added_at)
+                            .map(|dt| dt.with_timezone(&Utc))
+                            .unwrap_or_else(|_| Utc::now()),
+                    })
+                },
+            )
+            .optional()
+            .map_err(DatabaseError::from)
+        })
+    }
+}

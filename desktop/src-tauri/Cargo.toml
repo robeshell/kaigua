@@ -1,13 +1,13 @@
 [package]
-name = "scrapex"
+name = "kaigua"
 version.workspace = true
-description = "ScrapeX desktop shell (Tauri)"
-authors = ["ScrapeX"]
+description = "kaigua desktop shell (Tauri)"
+authors = ["kaigua"]
 edition.workspace = true
 license.workspace = true
 
 [lib]
-name = "scrapex_lib"
+name = "kaigua_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
 [build-dependencies]
@@ -25,9 +25,10 @@ tracing.workspace = true
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 uuid.workspace = true
 
-tauri = { version = "2", features = [] }
+tauri = { version = "2", features = ["protocol-asset"] }
 tauri-plugin-opener = "2"
 
 toml = "0.8"
 dirs = "6"
 chrono = { workspace = true }
+tauri-plugin-dialog = "2.7.2"

@@ -3,7 +3,7 @@ name = "renamer"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
-description = "ScrapeX rename templates and rule engine (stub in M0)"
+description = "kaigua rename templates and rule engine (stub in M0)"
 
 [dependencies]
 media-core.workspace = true

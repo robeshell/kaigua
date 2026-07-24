@@ -176,7 +176,7 @@ impl FilesystemService {
         }
 
         if options.atomic {
-            let tmp = destination.with_extension("tmp-scrapex");
+            let tmp = destination.with_extension("tmp-kaigua");
             fs::write(&tmp, data).map_err(|source| FilesystemError::Io {
                 path: tmp.clone(),
                 source,

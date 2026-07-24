@@ -1,4 +1,4 @@
-# ScrapeX 跨平台改造计划与功能清单
+# kaigua 跨平台改造计划与功能清单
 
 > 目标栈：Tauri 2 + Rust 核心 + React + Tailwind CSS  
 > 对照基线：当前 Swift 6 / macOS 15 / SwiftUI 实现（约 20k LOC）  
@@ -76,7 +76,7 @@ Electron、sqlx 强 async DB、Flutter、Swift 二进制嵌入、重型 UI kit�
 
 ### 1.1 目标
 
-1. 将 ScrapeX 从 **macOS-only SwiftUI** 改造为 **macOS / Windows / Linux** 桌面应用。
+1. 将 kaigua 从 **macOS-only SwiftUI** 改造为 **macOS / Windows / Linux** 桌面应用。
 2. **功能对等优先**：以现有产品行为为规格，而不是重新发明产品。
 3. **性能借机提升**：扫盘入库批量事务、HTTP 限流、缩略图管线、可选并行遍历；不指望网络刮削数量级变快。
 4. **Swift 代码当规格书**：算法、状态机、匹配规则、NFO 约定以现实现 + 单测为准；不追求源码级复用。
@@ -479,18 +479,22 @@ ID：sourceId, imdbId, tmdbId, tvdbId, bangumiId
 ## 4. 阶段交付物清单（汇总）
 
 ### M0 地基
-- [ ] Tauri 2 + React + Tailwind + Vite 工程可启动
-- [ ] rusqlite schema（DATA-* 终态）+ migration
-- [ ] 配置读写（SET-11）
-- [ ] Filesystem 层（MAINT-08）
-- [ ] TaskQueue 空壳 + 事件（TASK-01/03/08）
-- [ ] 基础日志
+- [x] Tauri 2 + React + Tailwind + Vite 工程可启动
+- [x] rusqlite schema（DATA-* 终态）+ migration
+- [x] 配置读写（SET-11）
+- [x] Filesystem 层（MAINT-08）
+- [x] TaskQueue 空壳 + 事件（TASK-01/03/08）
+- [x] 基础日志
 
 ### M1 库与扫描 MVP
-- [ ] LIB-01…06，SCAN-01…10/16，NFO-01/06
-- [ ] UI-01…03/06…08/12(Refresh)/13/14
-- [ ] CACHE-01，I18N-01/02，SET-01/02/07，PLAT-05
-- [ ] **出口**：真实电影库 + 真实剧集库各扫一遍
+- [x] LIB-01…06（加库/类型/重命名/删除/侧栏/路径）
+- [x] SCAN-01…06/09（全量电影/剧集扫描、排除目录、文件名解析、扁平季合并）— 增量 SCAN-11+ 仍属 M4
+- [x] NFO-01/06（NFOReader + 刷新时 importNFOForItem）；SCAN-07/08/10/16 部分覆盖（图片/NFO 探测随 import；进度阶段文案仍可细化）
+- [x] UI-01…03/06/12(Refresh) 基础壳
+- [x] UI-06/07/08（状态筛选、7 种排序、详情基础+海报）；CACHE-01 磁盘缩略图
+- [x] SET-01/02/07（五 Tab 壳、Library Tab、排除目录列表编辑器）；I18N-01/02（zh-Hans + en）
+- [x] UI-13/14（Toast / 空状态打磨）
+- [ ] **出口**：真实电影库 + 真实剧集库各扫一遍（待本机验证）
 
 ### M2 刮削 MVP
 - [ ] SCRAPE-01/02/04…06/09…16/18/19
@@ -578,4 +582,4 @@ ID：sourceId, imdbId, tmdbId, tvdbId, bangumiId
 - `rename_*_template` × 5
 - `rename_autoRenameAfterScrape` (bool)
 - `rename_createSeasonFolders` (bool)
-- API keys suite：`com.scrapex.apikeys`（迁移后改为配置文件字段）
+- API keys suite：`com.kaigua.apikeys`（迁移后改为配置文件字段）

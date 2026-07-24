@@ -3,7 +3,7 @@ name = "scraper-kit"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
-description = "ScrapeX scrapers and matching engine (stub in M0)"
+description = "kaigua scrapers and matching engine (stub in M0)"
 
 [dependencies]
 media-core.workspace = true

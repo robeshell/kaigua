@@ -118,28 +118,13 @@ impl TaskQueue {
     }
 
     pub async fn enqueue_smoke(&self, title: impl Into<String>) -> TaskSnapshot {
-        let title = title.into();
-        let id = Uuid::new_v4().to_string();
-        let now = Utc::now();
-        let cancel = Arc::new(AtomicBool::new(false));
-        let snapshot = TaskSnapshot {
-            id: id.clone(),
-            title: title.clone(),
-            kind: TaskKind::Smoke,
-            status: TaskStatus::Pending,
-            progress: None,
-            error_message: None,
-            created_at: now,
-            updated_at: now,
-        };
-
-        let work: TaskWork = Box::new(|handle| {
+        self.enqueue(title, TaskKind::Smoke, |_handle| {
             Box::pin(async move {
                 for step in 1..=5u32 {
-                    if handle.is_cancelled() {
+                    if _handle.is_cancelled() {
                         return Err("cancelled".into());
                     }
-                    handle
+                    _handle
                         .update_progress(TaskProgress {
                             completed: step,
                             total: 5,
@@ -151,7 +136,32 @@ impl TaskQueue {
                 }
                 Ok(())
             })
-        });
+        })
+        .await
+    }
+
+    pub async fn enqueue<F>(&self, title: impl Into<String>, kind: TaskKind, work: F) -> TaskSnapshot
+    where
+        F: FnOnce(TaskHandle) -> std::pin::Pin<Box<dyn std::future::Future<Output = Result<(), String>> + Send>>
+            + Send
+            + 'static,
+    {
+        let title = title.into();
+        let id = Uuid::new_v4().to_string();
+        let now = Utc::now();
+        let cancel = Arc::new(AtomicBool::new(false));
+        let snapshot = TaskSnapshot {
+            id: id.clone(),
+            title,
+            kind,
+            status: TaskStatus::Pending,
+            progress: None,
+            error_message: None,
+            created_at: now,
+            updated_at: now,
+        };
+
+        let work: TaskWork = Box::new(work);
 
         {
             let mut tasks = self.inner.tasks.lock().await;

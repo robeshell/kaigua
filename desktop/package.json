@@ -1,5 +1,5 @@
 {
-  "name": "scrapex",
+  "name": "kaigua",
   "private": true,
   "version": "0.1.0",
   "type": "module",
@@ -11,9 +11,12 @@
   },
   "dependencies": {
     "@tauri-apps/api": "^2",
+    "@tauri-apps/plugin-dialog": "^2.7.2",
     "@tauri-apps/plugin-opener": "^2",
+    "i18next": "^26.3.6",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-i18next": "^17.0.11",
     "zustand": "^5.0.6"
   },
   "devDependencies": {

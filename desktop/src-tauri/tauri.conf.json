@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "ScrapeX",
+  "productName": "kaigua",
   "version": "0.1.0",
-  "identifier": "com.scrapex.app",
+  "identifier": "com.kaigua.app",
   "build": {
     "beforeDevCommand": "pnpm dev",
     "devUrl": "http://localhost:1420",
@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "ScrapeX",
+        "title": "开刮",
         "width": 1280,
         "height": 800,
         "minWidth": 960,
@@ -20,7 +20,11 @@
       }
     ],
     "security": {
-      "csp": null
+      "csp": null,
+      "assetProtocol": {
+        "enable": true,
+        "scope": ["$CACHE/kaigua/**", "$CACHE/**"]
+      }
     }
   },
   "bundle": {

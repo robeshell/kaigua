@@ -19,3 +19,54 @@ pub struct MediaItem {
     pub library_id: String,
     pub added_at: DateTime<Utc>,
 }
+
+impl MediaItem {
+    pub fn new_movie(
+        title: impl Into<String>,
+        year: Option<i32>,
+        folder_path: impl Into<String>,
+        file_path: impl Into<String>,
+        library_id: impl Into<String>,
+        status: ScrapedStatus,
+    ) -> Self {
+        Self {
+            id: uuid::Uuid::new_v4().to_string(),
+            media_type: MediaType::Movie,
+            title: title.into(),
+            original_title: None,
+            year,
+            folder_path: folder_path.into(),
+            file_path: file_path.into(),
+            bookmark_data: None,
+            status,
+            scrape_issue: None,
+            library_id: library_id.into(),
+            added_at: Utc::now(),
+        }
+    }
+
+    pub fn new_show(
+        media_type: MediaType,
+        title: impl Into<String>,
+        year: Option<i32>,
+        show_root: impl Into<String>,
+        library_id: impl Into<String>,
+        status: ScrapedStatus,
+    ) -> Self {
+        let root = show_root.into();
+        Self {
+            id: uuid::Uuid::new_v4().to_string(),
+            media_type,
+            title: title.into(),
+            original_title: None,
+            year,
+            folder_path: root.clone(),
+            file_path: root,
+            bookmark_data: None,
+            status,
+            scrape_issue: None,
+            library_id: library_id.into(),
+            added_at: Utc::now(),
+        }
+    }
+}
