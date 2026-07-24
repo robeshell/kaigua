@@ -290,6 +290,149 @@ async fn enqueue_refresh_inner(
     Ok(snapshot)
 }
 
+#[tauri::command]
+pub async fn scrape_library(
+    app: AppHandle,
+    state: State<'_, AppState>,
+    library_id: String,
+) -> Result<TaskSnapshot, String> {
+    let library = state
+        .db
+        .get_library(&library_id)
+        .map_err(err_string)?
+        .ok_or_else(|| format!("library not found: {library_id}"))?;
+    let config = state.config.lock().await.config.clone();
+    let db = Arc::clone(&state.db);
+    let title = format!("Scrape All · {}", library.name);
+    let options = scrape_options_from_config(&config);
+
+    let snapshot = state
+        .tasks
+        .enqueue(title, TaskKind::BatchScrape, move |handle| {
+            Box::pin(async move {
+                let (progress_tx, mut progress_rx) =
+                    tokio::sync::mpsc::unbounded_channel::<scraper_kit::ScrapeProgress>();
+                let job = tokio::spawn(async move {
+                    scraper_kit::scrape_library(db, &library_id, options, |p| {
+                        let _ = progress_tx.send(p);
+                    })
+                    .await
+                });
+                while let Some(p) = progress_rx.recv().await {
+                    if handle.is_cancelled() {
+                        break;
+                    }
+                    handle
+                        .update_progress(TaskProgress {
+                            completed: p.completed,
+                            total: p.total,
+                            current: p.current,
+                            stage_key: Some(p.stage_key),
+                        })
+                        .await;
+                }
+                job.await.map_err(|e| e.to_string())??;
+                Ok(())
+            })
+        })
+        .await;
+
+    watch_task(app.clone(), Arc::clone(&state.tasks), snapshot.id.clone());
+    let _ = app.emit("task-updated", &snapshot);
+    Ok(snapshot)
+}
+
+#[tauri::command]
+pub async fn scrape_items(
+    app: AppHandle,
+    state: State<'_, AppState>,
+    item_ids: Vec<String>,
+) -> Result<TaskSnapshot, String> {
+    if item_ids.is_empty() {
+        return Err("no items selected".into());
+    }
+    let config = state.config.lock().await.config.clone();
+    let options = scrape_options_from_config(&config);
+    let db = Arc::clone(&state.db);
+    let title = format!("Scrape · {} items", item_ids.len());
+
+    let snapshot = state
+        .tasks
+        .enqueue(title, TaskKind::Scrape, move |handle| {
+            Box::pin(async move {
+                let total = item_ids.len() as u32;
+                for (idx, id) in item_ids.into_iter().enumerate() {
+                    if handle.is_cancelled() {
+                        return Err("cancelled".into());
+                    }
+                    let item = db
+                        .get_media_item(&id)
+                        .map_err(err_string)?
+                        .ok_or_else(|| format!("media item not found: {id}"))?;
+                    handle
+                        .update_progress(TaskProgress {
+                            completed: idx as u32,
+                            total,
+                            current: item.title.clone(),
+                            stage_key: Some("matching".into()),
+                        })
+                        .await;
+                    scraper_kit::scrape_item(&db, &item, &options).await?;
+                }
+                Ok(())
+            })
+        })
+        .await;
+
+    watch_task(app.clone(), Arc::clone(&state.tasks), snapshot.id.clone());
+    let _ = app.emit("task-updated", &snapshot);
+    Ok(snapshot)
+}
+
+#[tauri::command]
+pub async fn search_match_candidates(
+    state: State<'_, AppState>,
+    query: String,
+    media_type: MediaType,
+) -> Result<Vec<scraper_kit::SearchResult>, String> {
+    let config = state.config.lock().await.config.clone();
+    let coordinator = scraper_kit::ScraperCoordinator::new(scraper_keys(&config));
+    coordinator
+        .search_manual(&query, media_type, &config.metadata_language)
+        .await
+}
+
+#[tauri::command]
+pub async fn apply_manual_match(
+    state: State<'_, AppState>,
+    item_id: String,
+    source_id: String,
+) -> Result<(), String> {
+    let config = state.config.lock().await.config.clone();
+    let options = scrape_options_from_config(&config);
+    let item = state
+        .db
+        .get_media_item(&item_id)
+        .map_err(err_string)?
+        .ok_or_else(|| format!("media item not found: {item_id}"))?;
+    scraper_kit::apply_manual_match(&state.db, &item, &source_id, &options).await
+}
+
+fn scrape_options_from_config(config: &AppConfig) -> scraper_kit::ScrapeOptions {
+    scraper_kit::ScrapeOptions {
+        language: config.metadata_language.clone(),
+        concurrency: config.scrape_concurrency.max(1) as usize,
+        keys: scraper_keys(config),
+    }
+}
+
+fn scraper_keys(config: &AppConfig) -> scraper_kit::ScraperKeys {
+    scraper_kit::ScraperKeys {
+        tmdb: config.api_keys.tmdb.clone(),
+        bangumi: config.api_keys.bangumi.clone(),
+    }
+}
+
 fn watch_task(app: AppHandle, tasks: Arc<crate::task_queue::TaskQueue>, id: String) {
     tauri::async_runtime::spawn(async move {
         loop {

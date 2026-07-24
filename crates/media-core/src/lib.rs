@@ -18,7 +18,7 @@ pub use filesystem::{
 pub use models::{
     CastMember, Library, MediaItem, MediaMetadata, MediaType, ScrapedStatus, TvEpisode, TvSeason,
 };
-pub use nfo::{import_nfo_for_item, NfoParsedData, NfoReader};
+pub use nfo::{import_nfo_for_item, write_kodi_nfo, NfoParsedData, NfoReader};
 pub use scanner::{
     refresh_library, FileNameParser, RefreshReport, ScanProgress, ScannedEpisode,
 };

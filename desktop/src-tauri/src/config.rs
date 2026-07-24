@@ -22,6 +22,8 @@ pub struct ApiKeysConfig {
     pub tmdb: String,
     pub tvdb: String,
     pub omdb: String,
+    #[serde(default)]
+    pub bangumi: String,
 }
 
 impl Default for AppConfig {

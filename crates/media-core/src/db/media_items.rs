@@ -140,6 +140,16 @@ impl AppDatabase {
             Ok(())
         })
     }
+
+    pub fn update_year(&self, item_id: &str, year: Option<i32>) -> Result<(), DatabaseError> {
+        self.with_conn(|conn| {
+            conn.execute(
+                "UPDATE media_items SET year = ?2 WHERE id = ?1",
+                params![item_id, year],
+            )?;
+            Ok(())
+        })
+    }
 }
 
 fn map_media_item(row: &rusqlite::Row<'_>) -> rusqlite::Result<MediaItem> {

@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { listen } from "@tauri-apps/api/event";
 
 import { EmptyState } from "./components/EmptyState";
+import { ManualMatchModal } from "./components/ManualMatchModal";
 import { SettingsModal } from "./components/SettingsModal";
 import { ToastHost } from "./components/ToastHost";
 import { SORT_OPTIONS, STATUS_FILTERS } from "./lib/mediaList";
@@ -11,6 +12,7 @@ import { useAppStore, type MediaType } from "./store/appStore";
 function App() {
   const { t, i18n } = useTranslation();
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [manualMatchOpen, setManualMatchOpen] = useState(false);
   const status = useAppStore((s) => s.status);
   const libraries = useAppStore((s) => s.libraries);
   const selectedLibraryId = useAppStore((s) => s.selectedLibraryId);
@@ -33,6 +35,8 @@ function App() {
   const addLibrary = useAppStore((s) => s.addLibrary);
   const deleteSelectedLibrary = useAppStore((s) => s.deleteSelectedLibrary);
   const refreshSelectedLibrary = useAppStore((s) => s.refreshSelectedLibrary);
+  const scrapeSelectedLibrary = useAppStore((s) => s.scrapeSelectedLibrary);
+  const scrapeSelectedItem = useAppStore((s) => s.scrapeSelectedItem);
   const refreshTasks = useAppStore((s) => s.refreshTasks);
   const upsertTask = useAppStore((s) => s.upsertTask);
   const visibleMediaItems = useAppStore((s) => s.visibleMediaItems);
@@ -97,6 +101,14 @@ function App() {
             className="kg-btn"
           >
             {t("action.refresh")}
+          </button>
+          <button
+            type="button"
+            disabled={!selected}
+            onClick={() => void scrapeSelectedLibrary()}
+            className="kg-btn kg-btn-outlined"
+          >
+            {t("action.scrapeAll")}
           </button>
           {selected ? (
             <button
@@ -285,6 +297,22 @@ function App() {
         <section className="flex min-h-0 flex-col overflow-hidden border-l border-hairline bg-surface">
           {detail ? (
             <div className="min-h-0 flex-1 overflow-auto p-4">
+              <div className="mb-3 flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  className="kg-btn kg-btn-outlined"
+                  onClick={() => void scrapeSelectedItem()}
+                >
+                  {t("action.scrapeItem")}
+                </button>
+                <button
+                  type="button"
+                  className="kg-btn kg-btn-toolbar"
+                  onClick={() => setManualMatchOpen(true)}
+                >
+                  {t("action.manualMatch")}
+                </button>
+              </div>
               <DetailPanel detail={detail} posterUrl={posterUrl} />
             </div>
           ) : (
@@ -331,6 +359,14 @@ function App() {
         </section>
       </div>
       {settingsOpen ? <SettingsModal onClose={() => setSettingsOpen(false)} /> : null}
+      {manualMatchOpen && detail ? (
+        <ManualMatchModal
+          itemId={detail.item.id}
+          mediaType={detail.item.mediaType}
+          initialQuery={detail.item.title}
+          onClose={() => setManualMatchOpen(false)}
+        />
+      ) : null}
       <ToastHost />
     </div>
   );

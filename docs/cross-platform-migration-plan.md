@@ -497,9 +497,9 @@ ID：sourceId, imdbId, tmdbId, tvdbId, bangumiId
 - [ ] **出口**：真实电影库 + 真实剧集库各扫一遍（待本机验证）
 
 ### M2 刮削 MVP
-- [ ] SCRAPE-01/02/04…06/09…16/18/19
-- [ ] NFO-02…04/07，SET-03…06，UI-09(基础)/10
-- [ ] **出口**：TMDB 电影、Bangumi 动漫全链路；手动匹配可用
+- [x] SCRAPE-01/02/04…06/09…16/18/19（TMDB+Bangumi；TVDB/OMDb 仍属 M4）
+- [x] NFO-02…04/07（Kodi 最小写）；SET-03…06（API Key / 并发 / 语言）基础；UI-09/10 基础（Scrape All / 选中 / 手动匹配）
+- [ ] **出口**：TMDB 电影、Bangumi 动漫全链路；手动匹配可用（待本机 API Key 验证）
 
 ### M3 整理与删除 MVP
 - [ ] RENAME-T-01…05/07/08，SCRAPE-20

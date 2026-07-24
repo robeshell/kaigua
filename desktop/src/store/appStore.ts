@@ -20,6 +20,7 @@ export type AppConfig = {
     tmdb: string;
     tvdb: string;
     omdb: string;
+    bangumi: string;
   };
 };
 
@@ -160,6 +161,8 @@ type AppStore = {
   addLibrary: (mediaType: MediaType) => Promise<void>;
   deleteSelectedLibrary: () => Promise<void>;
   refreshSelectedLibrary: () => Promise<void>;
+  scrapeSelectedLibrary: () => Promise<void>;
+  scrapeSelectedItem: () => Promise<void>;
   refreshTasks: () => Promise<void>;
   upsertTask: (task: TaskSnapshot) => void;
   visibleMediaItems: () => MediaItem[];
@@ -365,6 +368,38 @@ export const useAppStore = create<AppStore>((set, get) => ({
     }
   },
 
+  scrapeSelectedLibrary: async () => {
+    const id = get().selectedLibraryId;
+    if (!id) return;
+    try {
+      const task = await invoke<TaskSnapshot>("scrape_library", {
+        libraryId: id,
+      });
+      get().upsertTask(task);
+      get().showToast("开始批量刮削…");
+    } catch (err) {
+      const message = String(err);
+      set({ error: message });
+      get().showToast(message);
+    }
+  },
+
+  scrapeSelectedItem: async () => {
+    const id = get().selectedMediaId;
+    if (!id) return;
+    try {
+      const task = await invoke<TaskSnapshot>("scrape_items", {
+        itemIds: [id],
+      });
+      get().upsertTask(task);
+      get().showToast("开始刮削选中项…");
+    } catch (err) {
+      const message = String(err);
+      set({ error: message });
+      get().showToast(message);
+    }
+  },
+
   refreshTasks: async () => {
     try {
       const tasks = await invoke<TaskSnapshot[]>("list_tasks");
@@ -383,8 +418,13 @@ export const useAppStore = create<AppStore>((set, get) => ({
       return { tasks: [task, ...rest] };
     });
     if (prev?.status === task.status) return;
-    if (task.status === "completed" && task.kind === "refresh") {
-      get().showToast("刷新完成");
+    if (task.status === "completed") {
+      if (task.kind === "refresh") get().showToast("刷新完成");
+      else if (task.kind === "batchScrape" || task.kind === "scrape") {
+        get().showToast("刮削完成");
+        const libraryId = get().selectedLibraryId;
+        if (libraryId) void get().selectLibrary(libraryId);
+      }
     } else if (task.status === "failed") {
       get().showToast(task.errorMessage || "任务失败");
     }

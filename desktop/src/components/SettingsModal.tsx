@@ -45,6 +45,11 @@ export function SettingsModal({ onClose }: { onClose: () => void }) {
           </section>
 
           <section className="mb-7">
+            <p className="kg-section-label">{t("settings.section.api")}</p>
+            <ApiKeysSection />
+          </section>
+
+          <section className="mb-7">
             <p className="kg-section-label">{t("settings.section.scan")}</p>
             <ScrapeExclusionsSection />
           </section>
@@ -52,7 +57,6 @@ export function SettingsModal({ onClose }: { onClose: () => void }) {
           <section className="mb-7">
             <p className="kg-section-label">{t("settings.section.later")}</p>
             <div className="kg-settings-group">
-              <LaterRow title="API Keys" note="M2" />
               <LaterRow title="Rename Rules" note="M3" />
               <LaterRow title="Appearance" note="M6" />
             </div>
@@ -70,6 +74,109 @@ function LaterRow({ title, note }: { title: string; note: string }) {
         <p className="truncate text-[13.5px] font-semibold text-fg">{title}</p>
         <p className="truncate text-[11.5px] text-fg-secondary">Ships in {note}</p>
       </div>
+    </div>
+  );
+}
+
+function ApiKeysSection() {
+  const showToast = useAppStore((s) => s.showToast);
+  const [tmdb, setTmdb] = useState("");
+  const [bangumi, setBangumi] = useState("");
+  const [concurrency, setConcurrency] = useState(4);
+  const [language, setLanguage] = useState("zh-CN");
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    void (async () => {
+      const config = await invoke<{
+        apiKeys: { tmdb: string; bangumi?: string };
+        scrapeConcurrency: number;
+        metadataLanguage: string;
+      }>("get_config");
+      setTmdb(config.apiKeys.tmdb ?? "");
+      setBangumi(config.apiKeys.bangumi ?? "");
+      setConcurrency(config.scrapeConcurrency ?? 4);
+      setLanguage(config.metadataLanguage ?? "zh-CN");
+    })();
+  }, []);
+
+  const save = async () => {
+    setSaving(true);
+    try {
+      const config = await invoke<Record<string, unknown>>("get_config");
+      const apiKeys = {
+        ...((config.apiKeys as Record<string, string>) ?? {}),
+        tmdb,
+        bangumi,
+      };
+      await invoke("save_config", {
+        config: {
+          ...config,
+          apiKeys,
+          scrapeConcurrency: Math.min(8, Math.max(1, concurrency)),
+          metadataLanguage: language,
+        },
+      });
+      showToast("设置已保存");
+    } catch (err) {
+      showToast(String(err));
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="space-y-3">
+      <div className="kg-settings-group">
+        <label className="block px-3.5 py-3">
+          <span className="mb-1.5 block text-[12.5px] font-semibold text-fg-secondary">
+            TMDB API Key (Bearer)
+          </span>
+          <input
+            className="kg-field !py-2"
+            value={tmdb}
+            onChange={(e) => setTmdb(e.target.value)}
+            placeholder="eyJhbGciOi..."
+          />
+        </label>
+        <label className="block px-3.5 py-3">
+          <span className="mb-1.5 block text-[12.5px] font-semibold text-fg-secondary">
+            Bangumi Access Token（可选）
+          </span>
+          <input
+            className="kg-field !py-2"
+            value={bangumi}
+            onChange={(e) => setBangumi(e.target.value)}
+            placeholder="optional"
+          />
+        </label>
+        <label className="block px-3.5 py-3">
+          <span className="mb-1.5 block text-[12.5px] font-semibold text-fg-secondary">
+            刮削并发（1–8）
+          </span>
+          <input
+            type="number"
+            min={1}
+            max={8}
+            className="kg-field !py-2"
+            value={concurrency}
+            onChange={(e) => setConcurrency(Number(e.target.value) || 4)}
+          />
+        </label>
+        <label className="block px-3.5 py-3">
+          <span className="mb-1.5 block text-[12.5px] font-semibold text-fg-secondary">
+            元数据语言
+          </span>
+          <input
+            className="kg-field !py-2"
+            value={language}
+            onChange={(e) => setLanguage(e.target.value)}
+          />
+        </label>
+      </div>
+      <button type="button" className="kg-btn" disabled={saving} onClick={() => void save()}>
+        保存
+      </button>
     </div>
   );
 }
