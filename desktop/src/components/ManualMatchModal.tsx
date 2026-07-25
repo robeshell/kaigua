@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { invoke } from "@tauri-apps/api/core";
 
-import { useAppStore, type MediaType } from "../store/appStore";
+import { useAppStore, type MediaType, type TaskSnapshot } from "../store/appStore";
 
 export type MatchCandidate = {
   sourceId: string;
@@ -25,13 +26,14 @@ export function ManualMatchModal({
   initialQuery: string;
   onClose: () => void;
 }) {
+  const { t } = useTranslation();
   const showToast = useAppStore((s) => s.showToast);
-  const selectLibrary = useAppStore((s) => s.selectLibrary);
-  const selectedLibraryId = useAppStore((s) => s.selectedLibraryId);
+  const upsertTask = useAppStore((s) => s.upsertTask);
   const [query, setQuery] = useState(initialQuery);
   const [loading, setLoading] = useState(false);
   const [applying, setApplying] = useState(false);
   const [candidates, setCandidates] = useState<MatchCandidate[]>([]);
+  const [searched, setSearched] = useState(false);
 
   const search = async () => {
     setLoading(true);
@@ -41,6 +43,10 @@ export function ManualMatchModal({
         mediaType,
       });
       setCandidates(rows);
+      setSearched(true);
+      if (rows.length === 0) {
+        showToast(t("match.noResults"));
+      }
     } catch (err) {
       showToast(String(err));
     } finally {
@@ -54,53 +60,79 @@ export function ManualMatchModal({
   }, []);
 
   const apply = async (sourceId: string) => {
+    if (applying) return;
     setApplying(true);
     try {
-      await invoke("apply_manual_match", { itemId, sourceId });
-      showToast("手动匹配已写入");
-      if (selectedLibraryId) await selectLibrary(selectedLibraryId);
+      const task = await invoke<TaskSnapshot>("apply_manual_match", {
+        itemId,
+        sourceId,
+      });
+      upsertTask(task);
+      showToast(t("toast.manualMatchStarted"));
       onClose();
     } catch (err) {
       showToast(String(err));
-    } finally {
       setApplying(false);
     }
   };
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-barrier p-5"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-barrier px-5 py-6"
       onClick={onClose}
+      onKeyDown={(e) => {
+        if (e.key === "Escape") onClose();
+      }}
       role="presentation"
     >
       <div
-        className="flex max-h-[min(640px,90vh)] w-full max-w-[520px] flex-col overflow-hidden rounded-dialog border border-glass-border bg-elevated shadow-[0_8px_28px_rgb(0_0_0_/_0.09)]"
+        className="kg-glass kg-dialog"
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
+        aria-labelledby="manual-match-title"
       >
-        <header className="flex items-center justify-between gap-3 px-5 pb-3 pt-5">
-          <h2 className="text-[20px] font-extrabold tracking-[-0.25px] text-fg">手动匹配</h2>
+        <header className="kg-dialog-header flex items-center justify-between gap-3">
+          <h2
+            id="manual-match-title"
+            className="truncate text-[20px] font-extrabold tracking-[-0.25px] text-fg"
+          >
+            {t("action.manualMatch")}
+          </h2>
           <button type="button" className="kg-btn kg-btn-toolbar" onClick={onClose}>
-            关闭
+            {t("settings.close")}
           </button>
         </header>
-        <div className="flex gap-2 px-5 pb-3">
+
+        <div className="flex gap-2 px-6 pb-3">
           <input
-            className="kg-field flex-1 !py-2"
+            className="kg-field kg-field-compact flex-1"
             value={query}
+            autoFocus
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter") void search();
             }}
           />
-          <button type="button" className="kg-btn" disabled={loading} onClick={() => void search()}>
-            {loading ? "…" : "搜索"}
+          <button
+            type="button"
+            className="kg-btn"
+            disabled={loading || applying}
+            onClick={() => void search()}
+          >
+            {loading ? t("match.searching") : t("action.search")}
           </button>
         </div>
-        <ul className="min-h-0 flex-1 overflow-auto px-3 pb-5">
+
+        <ul className="kg-dialog-body !px-3">
           {candidates.length === 0 ? (
-            <li className="px-2 py-8 text-center text-[12px] text-fg-muted">无结果</li>
+            <li className="px-2 py-8 text-center text-[12px] text-fg-muted">
+              {loading
+                ? t("match.searching")
+                : searched
+                  ? t("match.noResults")
+                  : t("match.searching")}
+            </li>
           ) : (
             candidates.map((c) => (
               <li key={c.sourceId}>
@@ -108,22 +140,24 @@ export function ManualMatchModal({
                   type="button"
                   disabled={applying}
                   onClick={() => void apply(c.sourceId)}
-                  className="flex w-full items-start gap-3 rounded-control px-2 py-2.5 text-left hover:bg-row-hover"
+                  className="kg-list-row !min-h-[58px] rounded-control"
                 >
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-[13.5px] font-semibold text-fg">
+                  <span className="min-w-0 flex-1">
+                    <span className="kg-list-row-title">
                       {c.title}
                       {c.year ? (
                         <span className="ml-2 font-medium text-fg-secondary">({c.year})</span>
                       ) : null}
-                    </p>
-                    <p className="mt-0.5 truncate text-[11.5px] text-fg-secondary">
+                    </span>
+                    <span className="kg-list-row-subtitle">
                       {c.sourceId} · {(c.confidence * 100).toFixed(0)}%
-                    </p>
+                    </span>
                     {c.overview ? (
-                      <p className="mt-1 line-clamp-2 text-[11.5px] text-fg-muted">{c.overview}</p>
+                      <span className="mt-1 line-clamp-2 text-[11.5px] text-fg-muted">
+                        {c.overview}
+                      </span>
                     ) : null}
-                  </div>
+                  </span>
                 </button>
               </li>
             ))

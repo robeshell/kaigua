@@ -93,12 +93,14 @@ Electron、sqlx 强 async DB、Flutter、Swift 二进制嵌入、重型 UI kit�
 | P6 | 破坏性操作（删库/删文件/清理）必须显式确认 | `DeleteConfirmSheet` / cleanup 流 |
 | P7 | 自动匹配规则保持严格：归一化标题完全相等 + 年份一致才自动接受 | `AutoMatchEvaluator`（`confidenceThreshold` 当前未生效，勿当作已实现） |
 | P8 | NFO 是派生输出；SQLite 是权威数据源 | 现架构 |
+| P9 | 用户触发操作须有完整反馈闭环：开始可感知，结束有可见结果；任务面板 status 不能作为唯一反馈 | M3 UX |
+| P10 | 单选刮削走候选确认；多选与「全部刮削」可自动，结束须汇总成功/未匹配/失败 | M3 UX |
 
 ### 1.3 非目标（明确不做或延后）
 
 | 项 | 说明 |
 |----|------|
-| macOS Notch 任务浮层 | `App/TaskOverlay*`，跨平台无对等价值 |
+| macOS Notch 任务浮层 | `App/TaskOverlay*`，跨平台无对等价值；**不做**（UI-17）。与菜单栏/托盘进度（UI-19）不是同一能力 |
 | App Store 沙盒 + Security-Scoped Bookmark 完整语义 | 非沙盒桌面用路径即可；上架再做 adapter |
 | 综艺 / 演唱会媒体类型 | 原设计二期，本改造不引入 |
 | fanart.tv 独立源 | 规格提及，现实现未成独立 scraper |
@@ -114,7 +116,8 @@ Electron、sqlx 强 async DB、Flutter、Swift 二进制嵌入、重型 UI kit�
 ```
 现 Swift                         目标
 ─────────────────────────────    ────────────────────────────────
-App/ (Notch, Window)          →  砍 / 可选 macOS 后期插件
+App/ (Notch)                  →  不做（UI-17）；菜单栏/托盘进度走 UI-19
+App/ (Window)                 →  Tauri 主窗口（托盘为附加观察器，不隐藏 Dock）
 AppUI Views/VMs               →  React + Tailwind CSS
 AppUI Workflows/Services      →  Tauri commands + Rust task_queue
 AppUI State (TaskQueue 等)     →  Rust 任务引擎 + 前端 store（事件驱动）
@@ -239,9 +242,9 @@ flowchart TD
 | FID | 功能 | 阶段 | 优先级 | 风险 | Swift 锚点 | 验收要点 |
 |-----|------|------|--------|------|------------|----------|
 | SCRAPE-01 | 批量刮削当前库未刮削项 | M2 | P0 | M | `ScrapeEngine.scrape(library:)` | 只碰 `unscraped` |
-| SCRAPE-02 | 刮削选中项 | M2 | P0 | M | `scrapeItems` | 含 unscraped/partial |
+| SCRAPE-02 | 刮削选中项 | M2/M3 | P0 | M | `scrapeItems` + 候选面板 | **单选**：打开候选列表，用户确认后写入；**多选**：后台自动匹配（含 unscraped/partial） |
 | SCRAPE-03 | 重新刮削选中项 | M4 | P0 | M | `rescrapeItems` | 覆盖已 scraped |
-| SCRAPE-04 | 手动匹配 | M2 | P0 | M | `UnmatchedMatchViewModel`, `manualMatch` | 搜索多源 → 选结果 → 写入 |
+| SCRAPE-04 | 手动匹配 | M2 | P0 | M | `UnmatchedMatchViewModel`, `manualMatch` | 搜索多源 → 选结果 → 写入；与单选刮削共用候选面板 |
 | SCRAPE-05 | 源：TMDB（全类型） | M2 | P0 | M | `TMDBScraper` | search + fetchMetadata |
 | SCRAPE-06 | 源：Bangumi（仅 anime） | M2 | P0 | M | `BangumiScraper` | anime 优先顺序 |
 | SCRAPE-07 | 源：TVDB（tv/anime） | M4 | P1 | M | `TVDBScraper` | |
@@ -286,19 +289,19 @@ flowchart TD
 
 | FID | 功能 | 阶段 | 优先级 | 风险 | Swift 锚点 | 验收要点 |
 |-----|------|------|--------|------|------------|----------|
-| RENAME-R-01 | 规则：文本替换 | M5 | P1 | L | `TextReplace` | |
-| RENAME-R-02 | 规则：正则替换 | M5 | P1 | L | `RegexReplace` | |
-| RENAME-R-03 | 规则：插入文本 | M5 | P1 | L | `InsertText` | |
-| RENAME-R-04 | 规则：删除范围 | M5 | P1 | L | `DeleteRange` | |
-| RENAME-R-05 | 规则：大小写转换 | M5 | P1 | L | `CaseConversion` | |
-| RENAME-R-06 | 规则：自动编号 | M5 | P1 | L | `AutoNumbering` | |
-| RENAME-R-07 | 规则：去括号 | M5 | P1 | L | `StripBrackets` | |
-| RENAME-R-08 | RulePipeline 组合 | M5 | P1 | L | `RulePipeline` | |
-| RENAME-R-09 | 预览（冲突/非法字符检测） | M5 | P1 | M | `RenamePreview` | 冲突项不可执行 |
-| RENAME-R-10 | 执行改名 | M5 | P1 | M | `RenameExecutor` | 经 Filesystem 层 |
-| RENAME-R-11 | Undo（最多 10 快照） | M5 | P1 | M | `RenameUndoManager` | 可撤销最近批次 |
-| RENAME-R-12 | 预设保存/加载 | M5 | P2 | L | `PresetManager` | |
-| RENAME-R-13 | Renamer 独立窗口/路由 | M5 | P1 | M | `RenamerWindow`, `Window(id: "renamer")` | 工具栏入口 |
+| RENAME-R-01 | 规则：文本替换 | M5 | P1 | L | `TextReplace` | ✓ |
+| RENAME-R-02 | 规则：正则替换 | M5 | P1 | L | `RegexReplace` | ✓ |
+| RENAME-R-03 | 规则：插入文本 | M5 | P1 | L | `InsertText` | ✓ |
+| RENAME-R-04 | 规则：删除范围 | M5 | P1 | L | `DeleteRange` | ✓ |
+| RENAME-R-05 | 规则：大小写转换 | M5 | P1 | L | `CaseConversion` | ✓ |
+| RENAME-R-06 | 规则：自动编号 | M5 | P1 | L | `AutoNumbering` | ✓ |
+| RENAME-R-07 | 规则：去括号 | M5 | P1 | L | `StripBrackets` | ✓ |
+| RENAME-R-08 | RulePipeline 组合 | M5 | P1 | L | `RulePipeline` | ✓ |
+| RENAME-R-09 | 预览（冲突/非法字符检测） | M5 | P1 | M | `RenamePreview` | ✓ 冲突项不可执行 |
+| RENAME-R-10 | 执行改名 | M5 | P1 | M | `RenameExecutor` | ✓ 经 Filesystem 层 |
+| RENAME-R-11 | Undo（最多 10 快照） | M5 | P1 | M | `RenameUndoManager` | ✓ 可撤销最近批次 |
+| RENAME-R-12 | 预设保存/加载 | M5 | P2 | L | `PresetManager` | ✓ |
+| RENAME-R-13 | Renamer 独立窗口/路由 | M5 | P1 | M | `RenamerWindow`, `Window(id: "renamer")` | ✓ 工具栏入口 |
 
 ---
 
@@ -329,7 +332,7 @@ flowchart TD
 | TASK-03 | 状态：pending/running/completed/failed/cancelled | M0 | P0 | L | `TaskStatus` | |
 | TASK-04 | 取消当前任务 | M1 | P0 | M | `cancelTask` | 刮削/扫描可中断 |
 | TASK-05 | 任务中心面板 | M1 | P0 | M | `TaskCenterView` | 当前/排队/最近 |
-| TASK-06 | 完成通知（系统或应用内） | M3 | P1 | L | `completionNotifier` | |
+| TASK-06 | 完成通知（应用内 Toast） | M3 | P0 | L | Toast / `completionNotifier` | **原则**：用户触发的操作须有可见结果反馈；任务面板 status 不能作为唯一反馈。刮削结束须汇总成功/未匹配/失败数 |
 | TASK-07 | 完成后自动清理（可因面板打开保留） | M1 | P1 | L | `autoClearDelay`, `keepsFinishedTasks` | |
 | TASK-08 | 进度事件推送前端 | M0 | P0 | M | `@Observable` → Tauri emit | 节流 |
 
@@ -366,10 +369,11 @@ flowchart TD
 | UI-12 | 工具栏：Refresh / Scrape All / Rename / Logs / Tasks | M1–M3 | P0 | L | `MainWindow` toolbar | |
 | UI-13 | Toast / 轻提示 | M1 | P1 | L | MainWindow overlay | |
 | UI-14 | 空状态 | M1 | P1 | L | `EmptyStateView` | |
-| UI-15 | 日志面板 | M6 | P2 | L | `LogPanelView`, `LogStore` | |
-| UI-16 | 文件夹浏览器 | M6 | P2 | M | `FolderBrowserView` | |
-| UI-17 | Notch 浮层 | — | — | — | `App/TaskOverlay*` | **不做** |
+| UI-15 | 日志面板 | M6 | P2 | L | `LogPanelView`, `LogStore` | ✓ |
+| UI-16 | 文件夹浏览器 | M6 | P2 | M | `FolderBrowserView` | ✓ |
+| UI-17 | Notch 浮层 | — | — | — | `App/TaskOverlay*` | **不做**（≠ 菜单栏托盘） |
 | UI-18 | 多选条目批量操作 | M3 | P0 | M | selection + actions | 与右键能力一致 |
+| UI-19 | 菜单栏 / 托盘任务进度 | M6 | P1 | L | Tauri `tray-icon` | Mac 菜单栏 + Win 通知区；主窗口仍是主入口；`trayEnabled` 默认开 |
 
 右键/动作能力矩阵（与现 `capabilities` 对齐）：
 
@@ -398,10 +402,11 @@ flowchart TD
 | SET-05 | 元数据语言 | M2 | P0 | L | `metadata_language` | 默认 zh-CN；选项 zh-CN/zh-TW/en/ja |
 | SET-06 | NFO 格式选择 | M2 | P0 | L | `nfo_format` | 默认 kodi；M4 补 emby |
 | SET-07 | 扫描排除目录增删 | M1 | P0 | L | `scan_excluded_folders` | CSV 字符串 |
-| SET-08 | 清除 Avatar 缓存 | M4 | P2 | L | Avatar cache clear | |
+| SET-08 | 清除 Avatar 缓存 | M4 | P2 | L | Avatar cache clear | ✓ 与缩略图一并清除 |
 | SET-09 | Rename 模板与自动化 | M3 | P0 | L | `RenameSettingsTab` | 见 RENAME-T-* |
-| SET-10 | 外观 system/light/dark | M6 | P1 | L | `AppearanceMode` | CSS theme |
+| SET-10 | 外观 system/light/dark | M6 | P1 | L | `AppearanceMode` | ✓ CSS theme |
 | SET-11 | 配置持久化文件 | M0 | P0 | L | 替代 UserDefaults | 原子写 |
+| SET-12 | 菜单栏/托盘开关 | M6 | P1 | L | `trayEnabled` | 默认 `true`；关则隐藏托盘图标 |
 
 ---
 
@@ -412,7 +417,7 @@ flowchart TD
 | CACHE-01 | 本地海报缩略图磁盘缓存 | M1 | P0 | M | `ThumbnailCache` DiskCache | NAS 原图不反复解码 |
 | CACHE-02 | 缩略图内存缓存 | M1 | P1 | L | NSCache 等价 | |
 | CACHE-03 | 列表预加载缩略图 | M4 | P1 | M | preload 并发限制 | 滚动流畅 |
-| CACHE-04 | 远端演员头像缓存 | M4 | P1 | L | `AvatarCache` | |
+| CACHE-04 | 远端演员头像缓存 | M4 | P1 | L | `AvatarCache` | ✓ |
 | CACHE-05 | missing path 负缓存 | M4 | P2 | L | MissingPathStore | 避免重复打 NAS |
 
 ---
@@ -457,7 +462,7 @@ ID：sourceId, imdbId, tmdbId, tvdbId, bangumiId
 |-----|------|------|--------|------|------|
 | I18N-01 | 界面中文（简体） | M1 | P0 | L | 默认 |
 | I18N-02 | 界面 English | M1 | P0 | L | |
-| I18N-03 | 界面日本語 | M6 | P2 | L | |
+| I18N-03 | 界面日本語 | M6 | P2 | L | ✓ |
 | I18N-04 | 代码字符串与 UI 字符串分表 | M1 | P1 | L | 对齐现 `CodeStrings` / xcstrings 分层 |
 
 ---
@@ -466,13 +471,13 @@ ID：sourceId, imdbId, tmdbId, tvdbId, bangumiId
 
 | FID | 功能 | 阶段 | 优先级 | 风险 | 说明 |
 |-----|------|------|--------|------|------|
-| PLAT-01 | macOS 构建与签名准备 | M6 | P0 | M | |
-| PLAT-02 | Windows 构建与安装包 | M6 | P0 | M | |
-| PLAT-03 | Linux 构建（AppImage/deb 择一） | M6 | P1 | M | |
+| PLAT-01 | macOS 构建与签名准备 | M6 | P0 | M | ✓ 文档 + bundle；签名需证书 |
+| PLAT-02 | Windows 构建与安装包 | M6 | P0 | M | ✓ NSIS + CI |
+| PLAT-03 | Linux 构建（AppImage/deb 择一） | M6 | P1 | M | ✓ AppImage+deb + CI |
 | PLAT-04 | 废纸篓/回收站抽象 | M3 | P0 | M | macOS Trash / Windows Recycle / Linux trash-cli 或删除降级 |
 | PLAT-05 | 目录选择对话框 | M1 | P0 | L | Tauri dialog plugin |
 | PLAT-06 | 在文件管理器中显示 | M4 | P2 | L | |
-| PLAT-07 | 系统通知 | M3 | P2 | L | |
+| PLAT-07 | 系统通知 | M3 | P2 | L | ✓ 任务完成/失败通知 |
 
 ---
 
@@ -502,25 +507,41 @@ ID：sourceId, imdbId, tmdbId, tvdbId, bangumiId
 - [ ] **出口**：TMDB 电影、Bangumi 动漫全链路；手动匹配可用（待本机 API Key 验证）
 
 ### M3 整理与删除 MVP
-- [ ] RENAME-T-01…05/07/08，SCRAPE-20
-- [ ] MAINT-01…03，PLAT-04
-- [ ] UI-11/12(Scrape All, Rename)/18，TASK-06
-- [ ] **出口**：刮削→自动/手动模板改名→确认删除
+- [x] RENAME-T-01/02/05/07/08（模板引擎+默认模板+sanitize+恢复默认；设置页可编辑）
+- [x] RENAME-T-04 电影完整路径；剧集/动漫 show+season+episode 模板改名（对齐 Swift MediaRenameService）
+- [x] SCRAPE-20 刮削成功后自动改名（开关默认关）
+- [x] MAINT-01/03 删除确认（仅 DB / 含本地文件）
+- [x] PLAT-04 macOS Finder 废纸篓；Linux gio/trash-put；Windows 暂降级硬删
+- [x] UI-18 多选（⌘/Ctrl+点）批量改名/删除
+- [x] SCRAPE-02 单选路径 = 候选确认；多选/整库 = 自动；结束汇总 Toast（成功/未匹配/失败）
+- [x] UI-11 右键菜单；TASK-06 应用内结果反馈（P0）
+- [ ] **出口**：刮削→自动/手动模板改名→确认删除（本机验收）
 
 ### M4 对等补齐
-- [ ] SCAN-11…15，SCRAPE-03/07/08/17，NFO-05
-- [ ] RENAME-T-06，MAINT-04…07
-- [ ] UI-04/05，CACHE-02…04，LIB-08，SET-08
-- [ ] **出口**：与 Swift 版日常使用路径对等（除独立 Renamer / Notch）
+- [x] SCAN-11…14 / 13 增量扫描（目录 mtime 计划、仅扫 changed、消失目录清理、空刷新早退）
+- [x] SCAN-15 单条目从磁盘刷新（主文件/文件夹缺失则删 DB；剧集可补/删分集）
+- [x] SCRAPE-03 重新刮削选中项（覆盖已 scraped；右键/多选/详情）
+- [x] SCRAPE-17 下载剧照（episode still → `{stem}-thumb.jpg`）
+- [x] SCRAPE-07/08 TVDB（tv/anime）+ OMDb（movie）备用源；设置页可填 Key
+- [x] NFO-05 Emby/Jellyfin 写出（nested ratings + 多 uniqueid；设置可选）
+- [x] RENAME-T-06 整理到 Season XX（设置开关 + 右键/详情动作；改名可顺带创建）
+- [x] MAINT-04…07 残余扫描/清理面板 + 在文件管理器中显示
+- [x] UI-04/05 列表/海报网格切换（已落地）
+- [x] LIB-08 路径失效修复（设置页检测 + 重选文件夹并重新扫描）
+- [x] CACHE-02 缩略图内存 LRU；CACHE-03 已有；SET-08 清缩略图/头像缓存；CACHE-04 演员头像缓存 + 详情展示
+- [x] **出口**：与 Swift 版日常使用路径对等（除 Notch；本机库仍建议再验一遍）
 
 ### M5 独立 Renamer
-- [ ] RENAME-R-01…13
-- [ ] **出口**：预览→执行→Undo 完整
+- [x] RENAME-R-01…13（含 R-12 预设）
+- [x] **出口**：预览→执行→Undo 完整
 
 ### M6 打磨分发
-- [ ] I18N-03，SET-10，UI-15/16，PLAT-01…03/07
-- [ ] 性能压测：万级文件库空刷新、批量刮削限流、缩略图滚动
-- [ ] **出口**：三平台 beta 安装包
+- [x] I18N-03（日本語）；SET-10（外观 system/light/dark）
+- [x] UI-15 日志面板；UI-16 文件夹浏览器
+- [x] PLAT-01…03 打包配置/文档/CI；PLAT-07 系统通知
+- [x] UI-19 / SET-12 菜单栏·托盘任务进度（非 Notch；UI-17 仍不做）
+- [x] 性能压测基建：空刷新多目录回归 + `docs/perf.md`（真机 NAS/滚动仍待手测）
+- [ ] **出口**：三平台 beta 安装包（本机/CI 产物；正式签名公证按需）
 
 ---
 

@@ -19,9 +19,10 @@ impl FileNameParser {
 
     const NOISE_TOKENS: &[&str] = &[
         "1080p", "720p", "4K", "2160p", "480p", "BluRay", "BDRip", "WEB-DL", "WEBDL", "WEBRip",
-        "HDRip", "HDTV", "x264", "x265", "HEVC", "AVC", "EAC3", "TrueHD", "DTS-HD", "DTS-MA",
-        "DTS", "AAC", "AC3", "FLAC", "10bit", "SDR", "HDR", "HDR10", "DV", "DoVi", "Atmos",
-        "REMUX", "PROPER", "HD-MA", "全集",
+        "HDRip", "HDTV", "x264", "x265", "H264", "H265", "HEVC", "AVC", "EAC3", "TrueHD", "DTS-HD",
+        "DTS-MA", "DTS", "AAC", "AC3", "FLAC", "10bit", "SDR", "HDR", "HDR10", "DV", "DoVi", "Atmos",
+        "REMUX", "PROPER", "HD-MA", "HD2160P", "HD1080P", "HD720P", "HD480P", "CHS-ENG", "ENG-CHS",
+        "CHS", "CHT", "ENG", "JPN", "KOR", "全集",
     ];
 
     pub fn parse(filename: &str) -> ParsedFileName {
@@ -31,6 +32,11 @@ impl FileNameParser {
         } else {
             Self::parse_standard(&name)
         }
+    }
+
+    /// Re-clean a stored/display title for matching (dots already spaces OK).
+    pub fn clean_title_for_match(raw: &str) -> String {
+        Self::parse(&format!("{raw}.mkv")).title
     }
 
     pub fn extract_season_suffix(dir_name: &str) -> Option<(String, i32)> {
@@ -172,8 +178,13 @@ impl FileNameParser {
         static RE_SE: OnceLock<Regex> = OnceLock::new();
         static RE_YEAR: OnceLock<Regex> = OnceLock::new();
         static RE_TRAIL_EP: OnceLock<Regex> = OnceLock::new();
+        static RE_BRACKETS: OnceLock<Regex> = OnceLock::new();
 
         let mut s = name.replace('.', " ").replace('_', " ");
+        let re_brackets = RE_BRACKETS.get_or_init(|| {
+            Regex::new(r"(?i)[\[【][^\]】]*?(?:www|http|\.com|\.net|\.cn|btsj)[^\]】]*?[\]】]").unwrap()
+        });
+        s = re_brackets.replace_all(&s, " ").to_string();
 
         let mut season = None;
         let mut episode = None;
@@ -264,8 +275,27 @@ impl FileNameParser {
 }
 
 fn is_residual_noise_token(token: &str) -> bool {
-    let normalized = token.to_ascii_uppercase();
-    normalized == "HD" || token == "全集"
+    let upper = token.to_ascii_uppercase();
+    if upper == "HD" || token == "全集" {
+        return true;
+    }
+    // HD2160P / 2160P / H264 / CHS-ENG leftover fragments
+    if Regex::new(r"(?i)^(?:HD)?(?:480|720|1080|2160)P$")
+        .ok()
+        .is_some_and(|re| re.is_match(token))
+    {
+        return true;
+    }
+    if Regex::new(r"(?i)^H\.?26[45]$")
+        .ok()
+        .is_some_and(|re| re.is_match(token))
+    {
+        return true;
+    }
+    if upper.contains("世界网") || upper.contains("论坛") || upper.contains("BTSJ") {
+        return true;
+    }
+    false
 }
 
 fn chinese_numeral(s: &str) -> Option<i32> {
@@ -339,5 +369,20 @@ mod tests {
         let (base, season) = FileNameParser::extract_season_suffix("IT狂人 第 1 季").unwrap();
         assert_eq!(base, "IT狂人");
         assert_eq!(season, 1);
+    }
+
+    #[test]
+    fn strips_chinese_release_noise() {
+        let p = FileNameParser::parse(
+            "火遮眼.2026.HD2160P.AAC.H264.CHS-ENG.BT世界网.[www.btsj6.com].mp4",
+        );
+        assert_eq!(p.title, "火遮眼");
+        assert_eq!(p.year, Some(2026));
+        assert_eq!(
+            FileNameParser::clean_title_for_match(
+                "火遮眼 HD2160P H264 CHS-ENG BT世界网 [www btsj6 com]"
+            ),
+            "火遮眼"
+        );
     }
 }

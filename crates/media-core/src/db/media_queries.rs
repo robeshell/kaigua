@@ -17,6 +17,15 @@ pub struct MediaMetaSummary {
     pub genres: Vec<String>,
 }
 
+#[derive(Debug, Clone, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ShowListStats {
+    pub media_item_id: String,
+    pub season_count: u32,
+    pub episode_count: u32,
+    pub local_episode_count: u32,
+}
+
 impl AppDatabase {
     pub fn list_metadata_summaries(
         &self,
@@ -38,6 +47,37 @@ impl AppDatabase {
                     overview: row.get(3)?,
                     rating: row.get(4)?,
                     genres: serde_json::from_str(&genres_json).unwrap_or_default(),
+                })
+            })?;
+            let mut out = Vec::new();
+            for row in rows {
+                out.push(row?);
+            }
+            Ok(out)
+        })
+    }
+
+    /// Season/episode counts for TV & anime rows in a library (one grouped query).
+    pub fn list_show_stats(&self, library_id: &str) -> Result<Vec<ShowListStats>, DatabaseError> {
+        self.with_conn(|conn| {
+            let mut stmt = conn.prepare(
+                "SELECT s.mediaItemId,
+                        COUNT(DISTINCT s.id),
+                        COUNT(e.id),
+                        SUM(CASE WHEN e.filePath IS NOT NULL AND e.filePath != '' THEN 1 ELSE 0 END)
+                 FROM tv_seasons s
+                 INNER JOIN media_items i ON i.id = s.mediaItemId
+                 LEFT JOIN tv_episodes e ON e.seasonId = s.id
+                 WHERE i.libraryId = ?1
+                 GROUP BY s.mediaItemId",
+            )?;
+            let rows = stmt.query_map(params![library_id], |row| {
+                let local: i64 = row.get::<_, Option<i64>>(3)?.unwrap_or(0);
+                Ok(ShowListStats {
+                    media_item_id: row.get(0)?,
+                    season_count: row.get::<_, i64>(1)? as u32,
+                    episode_count: row.get::<_, i64>(2)? as u32,
+                    local_episode_count: local.max(0) as u32,
                 })
             })?;
             let mut out = Vec::new();

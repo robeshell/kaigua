@@ -108,6 +108,34 @@ impl AppDatabase {
         })
     }
 
+    pub fn update_episode_file_path(
+        &self,
+        episode_id: &str,
+        file_path: &str,
+    ) -> Result<(), DatabaseError> {
+        self.with_conn(|conn| {
+            conn.execute(
+                "UPDATE tv_episodes SET filePath = ?2 WHERE id = ?1",
+                params![episode_id, file_path],
+            )?;
+            Ok(())
+        })
+    }
+
+    pub fn update_episode_still_path(
+        &self,
+        episode_id: &str,
+        still_path: &str,
+    ) -> Result<(), DatabaseError> {
+        self.with_conn(|conn| {
+            conn.execute(
+                "UPDATE tv_episodes SET stillPath = ?2 WHERE id = ?1",
+                params![episode_id, still_path],
+            )?;
+            Ok(())
+        })
+    }
+
     pub fn upsert_season(&self, season: &TvSeason) -> Result<(), DatabaseError> {
         self.with_conn(|conn| {
             conn.execute(
@@ -193,6 +221,13 @@ impl AppDatabase {
                 ],
             )?;
             Ok(())
+        })
+    }
+
+    pub fn delete_episode(&self, episode_id: &str) -> Result<bool, DatabaseError> {
+        self.with_conn(|conn| {
+            let n = conn.execute("DELETE FROM tv_episodes WHERE id = ?1", params![episode_id])?;
+            Ok(n > 0)
         })
     }
 

@@ -182,51 +182,75 @@ impl TmdbScraper {
             if stub.season_number < 0 {
                 continue;
             }
-            let url = format!(
-                "{BASE}/tv/{tv_id}/season/{}?language={}",
-                stub.season_number,
-                urlencoding::encode(language)
-            );
-            let Ok(data) = self.get_json(&url).await else {
-                continue;
-            };
-            let detail: SeasonDetail = serde_json::from_value(data).map_err(|e| e.to_string())?;
-            out.push(ScrapedSeason {
-                season_number: detail.season_number,
-                title: detail.name,
-                overview: detail.overview,
-                poster_url: detail.poster_path.map(|p| format!("{IMAGE_BASE}{p}")),
-                air_date: detail.air_date,
-                episode_count: Some(detail.episodes.len() as i32),
-                episodes: detail
-                    .episodes
-                    .into_iter()
-                    .map(|ep| ScrapedEpisode {
-                        episode_number: ep.episode_number,
-                        title: ep.name,
-                        overview: ep.overview,
-                        air_date: ep.air_date,
-                        still_url: ep.still_path.map(|p| format!("{IMAGE_BASE}{p}")),
-                        runtime: ep.runtime,
-                        rating: ep.vote_average,
-                        director: None,
-                        writer: None,
-                    })
-                    .collect(),
-            });
+            if let Ok(season) = self.fetch_season(tv_id, stub.season_number, language).await {
+                out.push(season);
+            }
         }
         Ok(out)
     }
 
+    /// Fetch a single TV season (title / overview / poster / episodes).
+    pub async fn fetch_season(
+        &self,
+        tv_id: &str,
+        season_number: i32,
+        language: &str,
+    ) -> Result<ScrapedSeason, String> {
+        if !self.is_configured() {
+            return Err("err.apiKey".into());
+        }
+        let url = format!(
+            "{BASE}/tv/{tv_id}/season/{season_number}?language={}",
+            urlencoding::encode(language)
+        );
+        let data = self.get_json(&url).await?;
+        let detail: SeasonDetail = serde_json::from_value(data).map_err(|e| e.to_string())?;
+        Ok(ScrapedSeason {
+            season_number: detail.season_number,
+            title: detail.name,
+            overview: detail.overview,
+            poster_url: detail.poster_path.map(|p| format!("{IMAGE_BASE}{p}")),
+            air_date: detail.air_date,
+            episode_count: Some(detail.episodes.len() as i32),
+            episodes: detail
+                .episodes
+                .into_iter()
+                .map(|ep| ScrapedEpisode {
+                    episode_number: ep.episode_number,
+                    title: ep.name,
+                    overview: ep.overview,
+                    air_date: ep.air_date,
+                    still_url: ep.still_path.map(|p| format!("{IMAGE_BASE}{p}")),
+                    runtime: ep.runtime,
+                    rating: ep.vote_average,
+                    director: None,
+                    writer: None,
+                })
+                .collect(),
+        })
+    }
+
     async fn get_json(&self, url: &str) -> Result<serde_json::Value, String> {
-        let response = self
-            .client
-            .get(url)
-            .header("Authorization", format!("Bearer {}", self.api_key.trim()))
-            .header("Accept", "application/json")
-            .send()
-            .await
-            .map_err(|e| e.to_string())?;
+        let key = self.api_key.trim();
+        // v4 Read Access Token (JWT) → Bearer; v3 API Key → query `api_key=`.
+        let response = if key.starts_with("eyJ") {
+            self.client
+                .get(url)
+                .header("Authorization", format!("Bearer {key}"))
+                .header("Accept", "application/json")
+                .send()
+                .await
+                .map_err(|e| e.to_string())?
+        } else {
+            let sep = if url.contains('?') { '&' } else { '?' };
+            let url = format!("{url}{sep}api_key={}", urlencoding::encode(key));
+            self.client
+                .get(&url)
+                .header("Accept", "application/json")
+                .send()
+                .await
+                .map_err(|e| e.to_string())?
+        };
         let status = response.status();
         if status.as_u16() == 429 {
             return Err("rateLimited".into());

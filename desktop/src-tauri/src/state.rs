@@ -1,10 +1,12 @@
 use std::path::PathBuf;
 use std::sync::Arc;
 
-use media_core::{AppDatabase, ThumbnailCache};
+use media_core::{AppDatabase, AvatarCache, ThumbnailCache};
+use renamer::{PresetManager, RenameUndoManager};
 use tokio::sync::Mutex;
 
 use crate::config::{AppConfig, ConfigStore};
+use crate::log_store::LogStore;
 use crate::task_queue::TaskQueue;
 
 pub struct AppState {
@@ -12,11 +14,15 @@ pub struct AppState {
     pub config: Arc<Mutex<ConfigStore>>,
     pub tasks: Arc<TaskQueue>,
     pub thumbs: Arc<ThumbnailCache>,
+    pub avatars: Arc<AvatarCache>,
+    pub rename_undo: Arc<RenameUndoManager>,
+    pub rename_presets: Arc<PresetManager>,
+    pub logs: Arc<LogStore>,
     pub data_dir: PathBuf,
 }
 
 impl AppState {
-    pub fn bootstrap() -> anyhow::Result<Self> {
+    pub fn bootstrap(logs: Arc<LogStore>) -> anyhow::Result<Self> {
         let data_dir = app_data_dir()?;
         std::fs::create_dir_all(&data_dir)?;
 
@@ -29,12 +35,21 @@ impl AppState {
 
         let tasks = Arc::new(TaskQueue::new());
         let thumbs = Arc::new(ThumbnailCache::open_default()?);
+        let avatars = Arc::new(AvatarCache::open_default()?);
+        let rename_undo = Arc::new(RenameUndoManager::open(
+            data_dir.join("rename_snapshots"),
+        )?);
+        let rename_presets = Arc::new(PresetManager::open(data_dir.join("rename_presets"))?);
 
         Ok(Self {
             db,
             config,
             tasks,
             thumbs,
+            avatars,
+            rename_undo,
+            rename_presets,
+            logs,
             data_dir,
         })
     }

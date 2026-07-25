@@ -25,10 +25,12 @@ tracing.workspace = true
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 uuid.workspace = true
 
-tauri = { version = "2", features = ["protocol-asset"] }
+reqwest.workspace = true
+tauri = { version = "2", features = ["protocol-asset", "tray-icon"] }
 tauri-plugin-opener = "2"
 
 toml = "0.8"
 dirs = "6"
 chrono = { workspace = true }
 tauri-plugin-dialog = "2.7.2"
+tauri-plugin-notification = "2"

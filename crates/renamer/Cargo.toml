@@ -3,9 +3,17 @@ name = "renamer"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
-description = "kaigua rename templates and rule engine (stub in M0)"
+description = "kaigua rename templates and media rename (M3); rule engine in M5"
 
 [dependencies]
+chrono.workspace = true
+dirs = "6"
 media-core.workspace = true
+regex.workspace = true
 serde.workspace = true
+serde_json.workspace = true
 thiserror.workspace = true
+uuid.workspace = true
+
+[dev-dependencies]
+tempfile = "3"

@@ -226,10 +226,96 @@ impl FilesystemService {
         })
     }
 
-    /// Trash support lands in M3 (PLAT-04). M0 only exposes the hard-delete path.
-    pub fn trash_item(&self, _path: impl AsRef<Path>) -> Result<FilesystemChangeSet, FilesystemError> {
-        Err(FilesystemError::TrashUnavailable)
+    /// Move path to the platform trash / recycle bin when available.
+    /// Falls back to `TrashUnavailable` so callers can hard-delete after confirmation.
+    pub fn trash_item(&self, path: impl AsRef<Path>) -> Result<FilesystemChangeSet, FilesystemError> {
+        let path = path.as_ref();
+        if !path.exists() {
+            return Err(FilesystemError::NotFound(path.to_path_buf()));
+        }
+
+        #[cfg(target_os = "macos")]
+        {
+            trash_macos(path)?;
+            return Ok(FilesystemChangeSet {
+                removed_paths: vec![path_string(path)],
+                ..Default::default()
+            });
+        }
+
+        #[cfg(target_os = "linux")]
+        {
+            if trash_linux(path).is_ok() {
+                return Ok(FilesystemChangeSet {
+                    removed_paths: vec![path_string(path)],
+                    ..Default::default()
+                });
+            }
+            return Err(FilesystemError::TrashUnavailable);
+        }
+
+        #[cfg(target_os = "windows")]
+        {
+            // Windows recycle-bin API lands with a dedicated crate in M6; fail closed for now.
+            let _ = path;
+            return Err(FilesystemError::TrashUnavailable);
+        }
+
+        #[cfg(not(any(target_os = "macos", target_os = "linux", target_os = "windows")))]
+        {
+            let _ = path;
+            Err(FilesystemError::TrashUnavailable)
+        }
     }
+}
+
+#[cfg(target_os = "macos")]
+fn trash_macos(path: &Path) -> Result<(), FilesystemError> {
+    use std::process::Command;
+
+    let posix = path.to_string_lossy();
+    // Escape for AppleScript string literal.
+    let escaped = posix.replace('\\', "\\\\").replace('"', "\\\"");
+    let script = format!(
+        "tell application \"Finder\" to delete (POSIX file \"{escaped}\" as alias)"
+    );
+    let output = Command::new("osascript")
+        .arg("-e")
+        .arg(&script)
+        .output()
+        .map_err(|source| FilesystemError::Io {
+            path: path.to_path_buf(),
+            source,
+        })?;
+    if output.status.success() {
+        Ok(())
+    } else {
+        let stderr = String::from_utf8_lossy(&output.stderr);
+        Err(FilesystemError::Io {
+            path: path.to_path_buf(),
+            source: std::io::Error::other(format!("Finder trash failed: {stderr}")),
+        })
+    }
+}
+
+#[cfg(target_os = "linux")]
+fn trash_linux(path: &Path) -> Result<(), FilesystemError> {
+    use std::process::Command;
+
+    // Prefer gio (GLib), then trash-put (trash-cli).
+    for (bin, args_prefix) in [("gio", &["trash"][..]), ("trash-put", &[][..])] {
+        let mut cmd = Command::new(bin);
+        for a in args_prefix {
+            cmd.arg(a);
+        }
+        let output = cmd.arg(path).output();
+        if let Ok(output) = output {
+            if output.status.success() {
+                return Ok(());
+            }
+        }
+    }
+    Err(FilesystemError::TrashUnavailable)
 }
 
 impl Default for FilesystemService {

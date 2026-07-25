@@ -1,12 +1,15 @@
 {
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "default",
-  "description": "Capability for the main window",
-  "windows": ["main"],
+  "description": "Capability for main and renamer windows",
+  "windows": ["main", "renamer"],
   "permissions": [
     "core:default",
+    "core:window:allow-start-dragging",
+    "core:tray:default",
     "opener:default",
     "dialog:default",
+    "notification:default",
     "core:path:default"
   ]
 }

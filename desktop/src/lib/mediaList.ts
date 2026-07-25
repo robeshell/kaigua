@@ -116,8 +116,12 @@ export function filterAndSortMedia<T extends SortableMedia>(
       case "unscrapedFirst": {
         const lr = statusRank(lhs.status);
         const rr = statusRank(rhs.status);
-        if (lr === rr) return compareTitle(lhs.title, rhs.title);
-        return lr - rr;
+        if (lr !== rr) return lr - rr;
+        // Same status: newest first so refresh additions surface at the top.
+        if (lhs.addedAt !== rhs.addedAt) {
+          return lhs.addedAt < rhs.addedAt ? 1 : -1;
+        }
+        return compareTitle(lhs.title, rhs.title);
       }
     }
   });

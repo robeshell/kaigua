@@ -49,6 +49,8 @@ pub struct TaskSnapshot {
     pub status: TaskStatus,
     pub progress: Option<TaskProgress>,
     pub error_message: Option<String>,
+    #[serde(default)]
+    pub target_id: Option<String>,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
 }
@@ -118,7 +120,7 @@ impl TaskQueue {
     }
 
     pub async fn enqueue_smoke(&self, title: impl Into<String>) -> TaskSnapshot {
-        self.enqueue(title, TaskKind::Smoke, |_handle| {
+        self.enqueue(title, TaskKind::Smoke, None, |_handle| {
             Box::pin(async move {
                 for step in 1..=5u32 {
                     if _handle.is_cancelled() {
@@ -140,7 +142,21 @@ impl TaskQueue {
         .await
     }
 
-    pub async fn enqueue<F>(&self, title: impl Into<String>, kind: TaskKind, work: F) -> TaskSnapshot
+    pub async fn find_active(&self, kind: TaskKind, target_id: &str) -> Option<TaskSnapshot> {
+        self.list().await.into_iter().find(|t| {
+            t.kind == kind
+                && t.target_id.as_deref() == Some(target_id)
+                && matches!(t.status, TaskStatus::Pending | TaskStatus::Running)
+        })
+    }
+
+    pub async fn enqueue<F>(
+        &self,
+        title: impl Into<String>,
+        kind: TaskKind,
+        target_id: Option<String>,
+        work: F,
+    ) -> TaskSnapshot
     where
         F: FnOnce(TaskHandle) -> std::pin::Pin<Box<dyn std::future::Future<Output = Result<(), String>> + Send>>
             + Send
@@ -157,6 +173,7 @@ impl TaskQueue {
             status: TaskStatus::Pending,
             progress: None,
             error_message: None,
+            target_id,
             created_at: now,
             updated_at: now,
         };
@@ -187,6 +204,25 @@ impl TaskQueue {
             return true;
         }
         false
+    }
+
+    pub async fn cancel_active(&self) -> bool {
+        let id = {
+            let tasks = self.inner.tasks.lock().await;
+            tasks
+                .iter()
+                .find(|t| {
+                    matches!(
+                        t.snapshot.status,
+                        TaskStatus::Pending | TaskStatus::Running
+                    )
+                })
+                .map(|t| t.snapshot.id.clone())
+        };
+        match id {
+            Some(id) => self.cancel(&id).await,
+            None => false,
+        }
     }
 }
 

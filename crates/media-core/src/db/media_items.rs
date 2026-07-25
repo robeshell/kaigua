@@ -150,6 +150,46 @@ impl AppDatabase {
             Ok(())
         })
     }
+
+    pub fn update_media_paths(
+        &self,
+        item_id: &str,
+        folder_path: &str,
+        file_path: &str,
+    ) -> Result<(), DatabaseError> {
+        self.with_conn(|conn| {
+            conn.execute(
+                "UPDATE media_items SET folderPath = ?2, filePath = ?3 WHERE id = ?1",
+                params![item_id, folder_path, file_path],
+            )?;
+            Ok(())
+        })
+    }
+
+    pub fn delete_media_item(&self, item_id: &str) -> Result<bool, DatabaseError> {
+        self.with_conn(|conn| {
+            let n = conn.execute("DELETE FROM media_items WHERE id = ?1", params![item_id])?;
+            Ok(n > 0)
+        })
+    }
+
+    pub fn delete_media_items(&self, item_ids: &[String]) -> Result<usize, DatabaseError> {
+        if item_ids.is_empty() {
+            return Ok(0);
+        }
+        self.with_conn(|conn| {
+            let tx = conn.unchecked_transaction()?;
+            let mut deleted = 0usize;
+            {
+                let mut stmt = tx.prepare("DELETE FROM media_items WHERE id = ?1")?;
+                for id in item_ids {
+                    deleted += stmt.execute(params![id])? as usize;
+                }
+            }
+            tx.commit()?;
+            Ok(deleted)
+        })
+    }
 }
 
 fn map_media_item(row: &rusqlite::Row<'_>) -> rusqlite::Result<MediaItem> {
