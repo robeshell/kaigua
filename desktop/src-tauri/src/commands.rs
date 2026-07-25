@@ -1635,16 +1635,20 @@ pub async fn open_renamer_window(app: AppHandle, state: State<'_, AppState>) -> 
         let _ = existing.set_focus();
         return Ok(());
     }
-    tauri::WebviewWindowBuilder::new(
+    let builder = tauri::WebviewWindowBuilder::new(
         &app,
         "renamer",
         tauri::WebviewUrl::App("index.html".into()),
     )
     .title(crate::ui_i18n::t(&locale, "window.renamer"))
     .inner_size(1040.0, 740.0)
-    .min_inner_size(800.0, 560.0)
-    .build()
-    .map_err(err_string)?;
+    .min_inner_size(800.0, 560.0);
+
+    // Match main-window immersive chrome on Windows (macOS keeps system decorations).
+    #[cfg(target_os = "windows")]
+    let builder = builder.decorations(false);
+
+    builder.build().map_err(err_string)?;
     Ok(())
 }
 

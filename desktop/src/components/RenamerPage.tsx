@@ -3,6 +3,9 @@ import { useTranslation } from "react-i18next";
 import { invoke } from "@tauri-apps/api/core";
 import { open } from "@tauri-apps/plugin-dialog";
 
+import { WindowControls } from "./WindowControls";
+import { isImmersiveWindow } from "../lib/windowChrome";
+
 type RuleType =
   | "textReplace"
   | "regexReplace"
@@ -288,11 +291,26 @@ export function RenamerPage() {
     }
   }
 
+  const immersive = isImmersiveWindow();
+
   return (
-    <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-canvas text-fg">
+    <div className="kg-shell flex min-h-0 flex-1 flex-col overflow-hidden text-fg">
+      {immersive ? (
+        <div
+          className="kg-titlebar absolute inset-x-0 top-0 z-30 h-[var(--kg-titlebar-height)]"
+          aria-hidden
+        >
+          <div data-tauri-drag-region className="absolute inset-0" />
+          <WindowControls />
+        </div>
+      ) : null}
       <header
-        data-tauri-drag-region
-        className="flex shrink-0 items-center justify-between gap-3 border-b border-hairline px-5 pb-3 pt-4"
+        data-tauri-drag-region={!immersive ? true : undefined}
+        className={
+          immersive
+            ? "flex shrink-0 items-center justify-between gap-3 border-b border-hairline px-5 pb-3 pt-[calc(var(--kg-titlebar-height)+0.5rem)] pr-[calc(1.25rem+var(--kg-caption-width))]"
+            : "flex shrink-0 items-center justify-between gap-3 border-b border-hairline px-5 pb-3 pt-4"
+        }
       >
         <div className="min-w-0">
           <h1 className="kg-page-header-title">{t("renamer.title")}</h1>

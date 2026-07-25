@@ -9,6 +9,7 @@ mod ui_i18n;
 use std::sync::Arc;
 
 use state::AppState;
+use tauri::Manager;
 use tracing_subscriber::layer::SubscriberExt;
 use tracing_subscriber::util::SubscriberInitExt;
 use tracing_subscriber::EnvFilter;
@@ -28,6 +29,12 @@ pub fn run() {
         .setup(move |app| {
             logs.attach_app(app.handle().clone());
             tray::setup(app.handle())?;
+            // Windows has no Overlay titlebar; drop native chrome so content
+            // can draw edge-to-edge like macOS Overlay + traffic lights.
+            #[cfg(target_os = "windows")]
+            if let Some(window) = app.get_webview_window("main") {
+                window.set_decorations(false)?;
+            }
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![

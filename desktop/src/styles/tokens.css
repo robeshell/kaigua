@@ -65,6 +65,10 @@
   --kg-detail-width: 22rem;
   --kg-settings-max: 920px;
   --kg-dialog-max: 520px;
+  /* Overlay titlebar (macOS Overlay / Windows undecorated) */
+  --kg-titlebar-height: 28px;
+  --kg-rail-top: 40px;
+  --kg-caption-width: 0px;
 
   /* Type */
   --kg-font:
