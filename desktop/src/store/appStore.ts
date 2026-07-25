@@ -830,8 +830,7 @@ export const useAppStore = create<AppStore>((set, get) => ({
       return;
     }
     try {
-      const { revealItemInDir } = await import("@tauri-apps/plugin-opener");
-      await revealItemInDir(target);
+      await invoke("reveal_in_file_manager", { path: target });
     } catch (err) {
       get().showToast(localizeUserMessage(String(err)));
     }

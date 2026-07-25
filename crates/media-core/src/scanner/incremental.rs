@@ -216,10 +216,29 @@ pub fn mtime_changed(old: f64, new: f64) -> bool {
 }
 
 pub fn canonicalize_lossy(path: &Path) -> String {
-    path.canonicalize()
-        .unwrap_or_else(|_| path.to_path_buf())
+    let buf = path
+        .canonicalize()
+        .unwrap_or_else(|_| path.to_path_buf());
+    // Windows `canonicalize` yields `\\?\C:\...` / `\\?\UNC\...`, which break
+    // Explorer reveal APIs and confuse users in the UI.
+    strip_windows_verbatim_prefix(&buf)
         .to_string_lossy()
         .into_owned()
+}
+
+/// Drop Windows verbatim (`\\?\`) prefixes when safe for shell/UI use.
+pub fn strip_windows_verbatim_prefix(path: &Path) -> PathBuf {
+    #[cfg(windows)]
+    {
+        let s = path.to_string_lossy();
+        if let Some(rest) = s.strip_prefix(r"\\?\UNC\") {
+            return PathBuf::from(format!(r"\\{rest}"));
+        }
+        if let Some(rest) = s.strip_prefix(r"\\?\") {
+            return PathBuf::from(rest);
+        }
+    }
+    path.to_path_buf()
 }
 
 fn path_is_under(path: &str, root: &str) -> bool {

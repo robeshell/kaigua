@@ -87,6 +87,7 @@ pub fn run() {
             commands::list_logs,
             commands::clear_logs,
             commands::list_directory,
+            commands::reveal_in_file_manager,
         ])
         .run(tauri::generate_context!())
         .expect("error while running kaigua");

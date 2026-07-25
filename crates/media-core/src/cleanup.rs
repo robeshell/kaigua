@@ -255,10 +255,7 @@ fn remember_relative(
 }
 
 fn canonicalize_lossy(path: &Path) -> String {
-    path.canonicalize()
-        .unwrap_or_else(|_| path.to_path_buf())
-        .to_string_lossy()
-        .into_owned()
+    crate::scanner::canonicalize_lossy(path)
 }
 
 #[cfg(test)]

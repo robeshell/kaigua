@@ -1800,6 +1800,43 @@ pub async fn list_directory(path: String) -> Result<Vec<DirectoryEntryDto>, Stri
     Ok(out)
 }
 
+/// Reveal a file/folder in the OS file manager (Explorer / Finder / …).
+///
+/// Strips Windows `\\?\` prefixes from DB paths so Explorer can open them.
+#[tauri::command]
+pub async fn reveal_in_file_manager(path: String) -> Result<(), String> {
+    let trimmed = path.trim();
+    if trimmed.is_empty() {
+        return Err("empty path".into());
+    }
+    let cleaned = media_core::scanner::strip_windows_verbatim_prefix(std::path::Path::new(trimmed));
+    let target = if cleaned.exists() {
+        cleaned
+    } else if let Some(parent) = cleaned.parent().filter(|p| p.exists()) {
+        parent.to_path_buf()
+    } else {
+        return Err(format!("path does not exist: {}", cleaned.display()));
+    };
+    reveal_path_impl(&target)
+}
+
+#[cfg(windows)]
+fn reveal_path_impl(path: &std::path::Path) -> Result<(), String> {
+    // `explorer /select,<path>` is the reliable Windows reveal path;
+    // opener's ILCreateFromPathW rejects some canonicalized/verbatim forms.
+    std::process::Command::new("explorer")
+        .arg("/select,")
+        .arg(path)
+        .spawn()
+        .map_err(err_string)?;
+    Ok(())
+}
+
+#[cfg(not(windows))]
+fn reveal_path_impl(path: &std::path::Path) -> Result<(), String> {
+    tauri_plugin_opener::reveal_item_in_dir(path).map_err(err_string)
+}
+
 const MAX_RENAMER_FILES: usize = 5_000;
 
 fn collect_paths_into(

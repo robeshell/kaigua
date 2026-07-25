@@ -1346,14 +1346,12 @@ async function revealSeasonInFinder(
     return;
   }
   try {
-    const { revealItemInDir } = await import("@tauri-apps/plugin-opener");
-    await revealItemInDir(target);
+    await invoke("reveal_in_file_manager", { path: target });
   } catch (err) {
     // Season folder may be missing — fall back to the show root.
     if (target !== showFolder) {
       try {
-        const { revealItemInDir } = await import("@tauri-apps/plugin-opener");
-        await revealItemInDir(showFolder);
+        await invoke("reveal_in_file_manager", { path: showFolder });
         return;
       } catch {
         /* show toast below */
