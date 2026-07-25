@@ -1008,7 +1008,6 @@ function TasksDock({
   activeCount: number;
 }) {
   const { t } = useTranslation();
-  const status = useAppStore((s) => s.status);
   const tasks = useAppStore((s) => s.tasks);
   const dockRef = useRef<HTMLDivElement | null>(null);
 
@@ -1040,17 +1039,7 @@ function TasksDock({
           aria-label={t("tasks.title")}
         >
           <header className="flex items-center justify-between gap-2 border-b border-hairline px-3.5 py-2.5">
-            <div className="min-w-0">
-              <h2 className="text-[13.5px] font-semibold text-fg">{t("tasks.title")}</h2>
-              {status ? (
-                <p className="mt-0.5 text-[11px] text-fg-muted">
-                  {t("tasks.dbInfo", {
-                    count: status.libraryCount,
-                    version: status.version,
-                  })}
-                </p>
-              ) : null}
-            </div>
+            <h2 className="min-w-0 text-[13.5px] font-semibold text-fg">{t("tasks.title")}</h2>
             <button
               type="button"
               className="kg-btn kg-btn-toolbar"

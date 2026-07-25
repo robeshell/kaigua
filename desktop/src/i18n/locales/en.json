@@ -90,7 +90,6 @@
   "detail.runtimeMinutes": "{{m}}m",
   "tasks.title": "Tasks",
   "tasks.empty": "No tasks yet",
-  "tasks.dbInfo": "Libraries {{count}} · {{version}}",
   "tasks.status.pending": "Pending",
   "tasks.status.running": "Running",
   "tasks.status.completed": "Completed",

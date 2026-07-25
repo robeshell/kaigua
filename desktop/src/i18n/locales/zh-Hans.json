@@ -90,7 +90,6 @@
   "detail.runtimeMinutes": "{{m}} 分钟",
   "tasks.title": "任务",
   "tasks.empty": "暂无任务",
-  "tasks.dbInfo": "资料库 {{count}} · {{version}}",
   "tasks.status.pending": "等待中",
   "tasks.status.running": "进行中",
   "tasks.status.completed": "已完成",

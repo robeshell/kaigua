@@ -90,7 +90,6 @@
   "detail.runtimeMinutes": "{{m}} 分",
   "tasks.title": "タスク",
   "tasks.empty": "タスクはありません",
-  "tasks.dbInfo": "データベース",
   "tasks.status.pending": "待機中",
   "tasks.status.running": "実行中",
   "tasks.status.completed": "完了",
