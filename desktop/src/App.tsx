@@ -17,6 +17,7 @@ import { SettingsPage } from "./components/SettingsModal";
 import { LogPanel } from "./components/LogPanel";
 import { FolderBrowser } from "./components/FolderBrowser";
 import { ToastHost } from "./components/ToastHost";
+import { WindowControls } from "./components/WindowControls";
 import { SORT_OPTIONS, STATUS_FILTERS } from "./lib/mediaList";
 import { POSTER_THUMB, SEASON_THUMB, EPISODE_STILL } from "./lib/posterLoadQueue";
 import {
@@ -287,12 +288,14 @@ function App() {
   return (
     <div className="kg-shell flex h-full text-fg">
       <div
-        data-tauri-drag-region
-        className="absolute inset-x-0 top-0 z-30 h-[28px]"
+        className="kg-titlebar absolute inset-x-0 top-0 z-30 h-[var(--kg-titlebar-height)]"
         aria-hidden
-      />
+      >
+        <div data-tauri-drag-region className="absolute inset-0" />
+        <WindowControls />
+      </div>
       <aside
-        className="kg-chrome-rail flex w-[var(--kg-sidebar-width)] shrink-0 flex-col overflow-hidden border-r border-hairline px-2.5 pb-3 pt-[40px]"
+        className="kg-chrome-rail flex w-[var(--kg-sidebar-width)] shrink-0 flex-col overflow-hidden border-r border-hairline px-2.5 pb-3 pt-[var(--kg-rail-top)]"
         onContextMenu={(e) => e.preventDefault()}
       >
         <div className="kg-rail-brand select-none">
@@ -374,7 +377,7 @@ function App() {
         </nav>
       </aside>
 
-      <div className="flex min-h-0 min-w-0 flex-1 flex-col pt-[28px]">
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col pt-[var(--kg-titlebar-height)]">
         {settingsOpen ? (
           <SettingsPage onClose={() => setSettingsOpen(false)} />
         ) : logsOpen ? (

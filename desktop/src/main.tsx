@@ -6,8 +6,13 @@ import { getCurrentWindow } from "@tauri-apps/api/window";
 import App from "./App";
 import { RenamerPage } from "./components/RenamerPage";
 import { watchAppearance } from "./lib/appearance";
+import { isImmersiveWindow } from "./lib/windowChrome";
 import i18n from "./i18n";
 import "./index.css";
+
+document.documentElement.dataset.windowChrome = isImmersiveWindow()
+  ? "immersive"
+  : "native";
 
 function ThemeBootstrap({ children }: { children: React.ReactNode }) {
   useEffect(() => {
