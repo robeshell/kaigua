@@ -1,5 +1,5 @@
 //! Apply media rename templates to scraped items (M3).
-//! Aligned with ScrapeX `MediaRenameService` (movie + TV).
+//! Movie + TV show folder/file rename after scrape.
 
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};

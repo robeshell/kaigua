@@ -1,5 +1,5 @@
 //! Independent Renamer rule engine (RENAME-R-01…08).
-//! Aligned to ScrapeX RenamerKit `RenameRule` / `RulePipeline`.
+//! Batch rename rule pipeline (`RenameRule` / ordered transforms).
 
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;

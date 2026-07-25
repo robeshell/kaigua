@@ -1,4 +1,4 @@
-//! Template engine — aligned with ScrapeX `RenamerKit.TemplateEngine`.
+//! Template engine for rename patterns (`{title}`, `{season:02}`, …).
 
 use regex::Regex;
 use std::collections::HashMap;
