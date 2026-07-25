@@ -9,6 +9,7 @@ mod ui_i18n;
 use std::sync::Arc;
 
 use state::AppState;
+#[cfg(target_os = "windows")]
 use tauri::Manager;
 use tracing_subscriber::layer::SubscriberExt;
 use tracing_subscriber::util::SubscriberInitExt;
