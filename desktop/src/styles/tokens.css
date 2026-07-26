@@ -1,36 +1,14 @@
 /*
- * kaigua theme tokens — sourced from kai-brand-design
- * skins: default | pure | deep-night (+ system resolves)
- * accents.kaigua: indigo | teal | sky | slate
- * Components must read these variables; do not hardcode colors/radii.
+ * Kaigua-only compatibility tokens.
+ *
+ * Brand surfaces, typography colors, radii, layout, accents and product
+ * tokens come from brand.generated.css. A variable defined here must not also
+ * exist in that generated file; `npm run tokens:check` enforces the boundary.
  */
 
 :root,
 [data-skin="default"] {
-  color-scheme: light;
-  /* Surface ramp (default skin) */
-  --kg-canvas: #f7f7f8;
-  --kg-surface: #fafafb;
-  --kg-elevated: #ffffff;
-  --kg-overlay: #f1f2f4;
-  --kg-chrome: rgb(255 255 255 / 0.8);
-  --kg-chrome-strong: rgb(255 255 255 / 0.8);
-  --kg-canvas-highlight: #fbfbfc;
-
-  /* Text */
-  --kg-text-primary: #1c1c22;
-  --kg-text-secondary: #5a5a62;
-  --kg-text-muted: #77747d;
-
-  /* Glass / hairline / fills (light derivedAlphas) */
-  --kg-hairline: rgb(0 0 0 / 0.055);
-  --kg-border: rgb(0 0 0 / 0.08);
-  --kg-glass-border: rgb(0 0 0 / 0.07);
-  --kg-glass-strong: rgb(255 255 255 / 0.87);
-  --kg-glass-shadow: 0 8px 28px rgb(0 0 0 / 0.09);
-  --kg-glass-blur: 20px;
   --kg-menu-shadow: 0 8px 24px rgb(0 0 0 / 0.09);
-  --kg-subtle-fill: rgb(0 0 0 / 0.045);
   --kg-subtle-fill-hover: rgb(0 0 0 / 0.075);
   --kg-subtle-fill-pressed: rgb(0 0 0 / 0.11);
   --kg-subtle-fill-quiet: rgb(0 0 0 / 0.025);
@@ -39,65 +17,18 @@
   --kg-row-hover: rgb(0 0 0 / 0.035);
   --kg-row-selected: rgb(0 0 0 / 0.05);
   --kg-row-focus: rgb(0 0 0 / 0.055);
-  --kg-barrier: rgb(0 0 0 / 0.38);
-  /* Settings / grouped panels — surfaceContainerLow@72% */
   --kg-group-fill: rgb(250 250 251 / 0.72);
   --kg-skeleton-a: rgb(0 0 0 / 0.04);
   --kg-skeleton-b: rgb(0 0 0 / 0.08);
-
   --kg-on-accent: #ffffff;
   --kg-error: #dc2626;
   --kg-destructive-fill: rgb(220 38 38 / 0.08);
   --kg-destructive-hover: rgb(220 38 38 / 0.12);
-  --kg-warning: #b07514;
-
-  /* Radii */
-  --kg-radius-control: 10px;
-  --kg-radius-menu: 12px;
-  --kg-radius-card: 14px;
-  --kg-radius-sheet: 18px;
-  --kg-radius-dialog: 20px;
-  --kg-radius-pill: 999px;
-  --kg-radius-tooltip: 8px;
-
-  /* Layout */
-  --kg-sidebar-width: 216px;
-  --kg-detail-width: 22rem;
-  --kg-settings-max: 920px;
-  --kg-dialog-max: 520px;
-  /* Overlay titlebar (macOS Overlay / Windows undecorated) */
-  --kg-titlebar-height: 28px;
-  --kg-rail-top: 40px;
-  --kg-caption-width: 0px;
-
-  /* Type */
-  --kg-font:
-    ".SF Pro Text", "SF Pro Text", "PingFang SC", "Microsoft YaHei",
-    "Noto Sans CJK SC", Roboto, sans-serif;
-  --kg-motion: 160ms cubic-bezier(0.33, 1, 0.68, 1);
+  --kg-chrome-rail-shadow: 1px 0 6px rgb(0 0 0 / 0.06);
 }
 
-/* Pure skin — solid surfaces, blur=0, shadowScale=0 */
 [data-skin="pure"] {
-  color-scheme: light;
-  --kg-canvas: #f1f4f8;
-  --kg-surface: #fafcff;
-  --kg-elevated: #ffffff;
-  --kg-overlay: #e5ebf2;
-  --kg-chrome: #fafcff;
-  --kg-chrome-strong: #ffffff;
-  --kg-canvas-highlight: #f8fbff;
-  --kg-text-primary: #18202a;
-  --kg-text-secondary: #536171;
-  --kg-text-muted: #718092;
-  --kg-hairline: rgb(82 97 116 / 0.12);
-  --kg-border: rgb(82 97 116 / 0.12);
-  --kg-glass-border: rgb(82 97 116 / 0.12);
-  --kg-glass-strong: #ffffff;
-  --kg-glass-shadow: none;
-  --kg-glass-blur: 0px;
   --kg-menu-shadow: none;
-  --kg-subtle-fill: rgb(24 32 42 / 0.045);
   --kg-subtle-fill-hover: rgb(24 32 42 / 0.075);
   --kg-subtle-fill-pressed: rgb(24 32 42 / 0.11);
   --kg-subtle-fill-quiet: rgb(24 32 42 / 0.025);
@@ -106,7 +37,6 @@
   --kg-row-hover: rgb(24 32 42 / 0.035);
   --kg-row-selected: rgb(24 32 42 / 0.05);
   --kg-row-focus: rgb(24 32 42 / 0.055);
-  --kg-barrier: rgb(0 0 0 / 0.38);
   --kg-group-fill: #ffffff;
   --kg-skeleton-a: rgb(24 32 42 / 0.04);
   --kg-skeleton-b: rgb(24 32 42 / 0.08);
@@ -114,30 +44,11 @@
   --kg-error: #dc2626;
   --kg-destructive-fill: rgb(220 38 38 / 0.08);
   --kg-destructive-hover: rgb(220 38 38 / 0.12);
-  --kg-warning: #b07514;
+  --kg-chrome-rail-shadow: none;
 }
 
-/* Deep night */
 [data-skin="deep-night"] {
-  color-scheme: dark;
-  --kg-canvas: #0d0d0f;
-  --kg-surface: #17171a;
-  --kg-elevated: #202024;
-  --kg-overlay: #29292e;
-  --kg-chrome: rgb(32 32 36 / 0.9);
-  --kg-chrome-strong: rgb(32 32 36 / 0.9);
-  --kg-canvas-highlight: #17171a;
-  --kg-text-primary: #f7f3f4;
-  --kg-text-secondary: rgb(255 255 255 / 0.6);
-  --kg-text-muted: rgb(255 255 255 / 0.45);
-  --kg-hairline: rgb(255 255 255 / 0.065);
-  --kg-border: rgb(255 255 255 / 0.1);
-  --kg-glass-border: rgb(255 255 255 / 0.11);
-  --kg-glass-strong: rgb(32 32 36 / 0.9);
-  --kg-glass-shadow: 0 8px 28px rgb(0 0 0 / 0.42);
-  --kg-glass-blur: 20px;
   --kg-menu-shadow: 0 8px 24px rgb(0 0 0 / 0.42);
-  --kg-subtle-fill: rgb(255 255 255 / 0.055);
   --kg-subtle-fill-hover: rgb(255 255 255 / 0.075);
   --kg-subtle-fill-pressed: rgb(255 255 255 / 0.11);
   --kg-subtle-fill-quiet: rgb(255 255 255 / 0.025);
@@ -146,7 +57,6 @@
   --kg-row-hover: rgb(255 255 255 / 0.035);
   --kg-row-selected: rgb(255 255 255 / 0.055);
   --kg-row-focus: rgb(255 255 255 / 0.055);
-  --kg-barrier: rgb(0 0 0 / 0.62);
   --kg-group-fill: rgb(32 32 36 / 0.78);
   --kg-skeleton-a: rgb(255 255 255 / 0.04);
   --kg-skeleton-b: rgb(255 255 255 / 0.09);
@@ -154,39 +64,18 @@
   --kg-error: #f87171;
   --kg-destructive-fill: rgb(248 113 113 / 0.12);
   --kg-destructive-hover: rgb(248 113 113 / 0.18);
-  --kg-warning: #e6b84d;
+  --kg-chrome-rail-shadow: 1px 0 6px rgb(0 0 0 / 0.28);
 }
 
-/* Accent axis — kaigua (orthogonal to skin) */
-:root,
-[data-accent="indigo"] {
-  --kg-accent: #6673c7;
-  --kg-accent-09: rgb(102 115 199 / 0.09);
-  --kg-accent-10: rgb(102 115 199 / 0.1);
-  --kg-accent-14: rgb(102 115 199 / 0.14);
-  --kg-accent-16: rgb(102 115 199 / 0.16);
-}
-
-[data-accent="teal"] {
-  --kg-accent: #3f9e98;
-  --kg-accent-09: rgb(63 158 152 / 0.09);
-  --kg-accent-10: rgb(63 158 152 / 0.1);
-  --kg-accent-14: rgb(63 158 152 / 0.14);
-  --kg-accent-16: rgb(63 158 152 / 0.16);
-}
-
-[data-accent="sky"] {
-  --kg-accent: #0284c7;
-  --kg-accent-09: rgb(2 132 199 / 0.09);
-  --kg-accent-10: rgb(2 132 199 / 0.1);
-  --kg-accent-14: rgb(2 132 199 / 0.14);
-  --kg-accent-16: rgb(2 132 199 / 0.16);
-}
-
-[data-accent="slate"] {
-  --kg-accent: #475569;
-  --kg-accent-09: rgb(71 85 105 / 0.09);
-  --kg-accent-10: rgb(71 85 105 / 0.1);
-  --kg-accent-14: rgb(71 85 105 / 0.14);
-  --kg-accent-16: rgb(71 85 105 / 0.16);
+:root {
+  --kg-page-title-size: 28px;
+  --kg-detail-width: 22rem;
+  --kg-dialog-max: 520px;
+  --kg-titlebar-height: 28px;
+  --kg-rail-top: 38px;
+  --kg-caption-width: 0px;
+  --kg-font:
+    ".SF Pro Text", "SF Pro Text", "PingFang SC", "Microsoft YaHei",
+    "Noto Sans CJK SC", Roboto, sans-serif;
+  --kg-motion: 160ms cubic-bezier(0.33, 1, 0.68, 1);
 }

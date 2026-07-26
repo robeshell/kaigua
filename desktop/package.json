@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "tokens:check": "node scripts/check-token-boundary.mjs",
+    "build": "npm run tokens:check && tsc && vite build",
     "preview": "vite preview",
     "tauri": "tauri",
     "build:app": "tauri build"

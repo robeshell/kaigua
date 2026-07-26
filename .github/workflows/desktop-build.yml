@@ -37,6 +37,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Checkout Kai brand tokens
+        uses: actions/checkout@v4
+        with:
+          repository: robeshell/kai-brand-design
+          path: .kai-brand-design
+
+      - name: Verify generated brand tokens
+        working-directory: .
+        run: |
+          python3 .kai-brand-design/tool/kai_design.py check --skip-viewer
+          cmp .kai-brand-design/dist/release/kai-design.lock.json kai-design.lock.json
+          cmp .kai-brand-design/dist/css/kaigua/brand.generated.css desktop/src/styles/brand.generated.css
+
       - name: Linux deps
         if: runner.os == 'Linux'
         run: |
@@ -64,6 +77,9 @@ jobs:
 
       - name: Install frontend deps
         run: pnpm install --frozen-lockfile
+
+      - name: Verify product token boundary
+        run: pnpm tokens:check
 
       - name: Build Tauri app
         working-directory: desktop
