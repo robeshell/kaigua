@@ -74,8 +74,8 @@
   --kg-titlebar-height: 28px;
   --kg-rail-top: 38px;
   --kg-caption-width: 0px;
-  --kg-font:
-    ".SF Pro Text", "SF Pro Text", "PingFang SC", "Microsoft YaHei",
-    "Noto Sans CJK SC", Roboto, sans-serif;
+  /* Platform default stack (brand 0.4.2) — no pinned .SF Pro Text. */
+  --kg-font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+    "Noto Sans", "PingFang SC", "Microsoft YaHei", sans-serif;
   --kg-motion: 160ms cubic-bezier(0.33, 1, 0.68, 1);
 }
