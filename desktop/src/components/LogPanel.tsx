@@ -76,7 +76,6 @@ export function LogPanel({ onClose }: { onClose: () => void }) {
         <header className="kg-page-header !mb-4">
           <div className="min-w-0 flex-1">
             <h2 className="kg-page-header-title">{t("logs.title")}</h2>
-            <p className="kg-page-header-sub">{t("logs.subtitle")}</p>
           </div>
           <div className="kg-page-header-actions">
             <select

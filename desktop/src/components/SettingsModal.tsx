@@ -31,7 +31,6 @@ export function SettingsPage({ onClose }: { onClose: () => void }) {
         <header className="kg-page-header">
           <div className="min-w-0 flex-1">
             <h2 className="kg-page-header-title">{t("settings.title")}</h2>
-            <p className="kg-page-header-sub">{t("settings.subtitle")}</p>
           </div>
         </header>
 
@@ -369,7 +368,6 @@ function LanguageRow() {
   return (
     <SettingsRow
       title={t("settings.language.label")}
-      subtitle={t("settings.language.hint")}
       trailing={
         <select
           className="kg-select kg-field-compact"
@@ -406,7 +404,6 @@ function CacheRow() {
   return (
     <SettingsRow
       title={t("settings.cache.thumbs")}
-      subtitle={t("settings.cache.thumbsHint")}
       trailing={
         <button
           type="button"
@@ -457,7 +454,6 @@ function TrayRow() {
   return (
     <SettingsRow
       title={t("settings.tray.enabled")}
-      subtitle={t("settings.tray.enabledHint")}
       trailing={<KgSwitch checked={trayEnabled} disabled={saving} onChange={(v) => void save(v)} />}
     />
   );
@@ -560,7 +556,6 @@ function RenameSection() {
       <div className="kg-settings-group">
         <SettingsRow
           title={t("settings.rename.auto")}
-          subtitle={t("settings.rename.autoHint")}
           trailing={<KgSwitch checked={autoRename} onChange={setAutoRename} />}
         />
         <SettingsRow
@@ -786,7 +781,6 @@ function NfoSection() {
     <div className="kg-settings-group">
       <SettingsRow
         title={t("settings.nfoFormat")}
-        subtitle={t("settings.nfo.hint")}
         trailing={
           <select
             className="kg-select kg-field-compact"
