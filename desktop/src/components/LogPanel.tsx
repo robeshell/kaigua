@@ -97,7 +97,7 @@ export function LogPanel({ onClose }: { onClose: () => void }) {
 
         <div className="kg-settings-group min-h-0 flex-1 overflow-auto">
           {filtered.length === 0 ? (
-            <p className="px-3.5 py-10 text-center text-[12.5px] text-fg-muted">{t("logs.empty")}</p>
+            <p className="px-3.5 py-10 text-center text-[13px] text-fg-muted">{t("logs.empty")}</p>
           ) : (
             <ul className="kg-log-list">
               {filtered.map((entry) => (

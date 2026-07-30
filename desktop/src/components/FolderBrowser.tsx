@@ -104,18 +104,18 @@ export function FolderBrowser({
 
       <div className="min-h-0 flex-1 overflow-auto px-2 py-2">
         {loading ? (
-          <p className="px-2 py-8 text-center text-[12.5px] text-fg-muted">{t("browser.loading")}</p>
+          <p className="px-2 py-8 text-center text-[13px] text-fg-muted">{t("browser.loading")}</p>
         ) : error ? (
-          <p className="px-2 py-8 text-center text-[12.5px] text-error">{error}</p>
+          <p className="px-2 py-8 text-center text-[13px] text-error">{error}</p>
         ) : entries.length === 0 ? (
-          <p className="px-2 py-8 text-center text-[12.5px] text-fg-muted">{t("browser.empty")}</p>
+          <p className="px-2 py-8 text-center text-[13px] text-fg-muted">{t("browser.empty")}</p>
         ) : (
           <ul className="space-y-0.5">
             {entries.map((entry) => (
               <li key={entry.path}>
                 <button
                   type="button"
-                  className="flex w-full items-center gap-2 rounded-control px-2 py-1.5 text-left text-[12.5px] hover:bg-subtle"
+                  className="flex w-full items-center gap-2 rounded-control px-2 py-1.5 text-left text-[13px] hover:bg-subtle"
                   onClick={() => enter(entry)}
                   onDoubleClick={() => {
                     if (!entry.isDirectory) {

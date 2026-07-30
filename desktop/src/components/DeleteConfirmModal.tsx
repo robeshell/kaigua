@@ -33,7 +33,7 @@ export function DeleteConfirmModal({
           >
             {t("delete.title")}
           </h2>
-          <p className="mt-2 text-[13.5px] leading-[1.45] text-fg-secondary">
+          <p className="mt-2 text-[14px] leading-[1.45] text-fg-secondary">
             {t("delete.message", { title })}
           </p>
         </header>
@@ -46,10 +46,10 @@ export function DeleteConfirmModal({
               className="mt-0.5"
             />
             <span className="min-w-0">
-              <span className="block text-[13.5px] font-semibold text-fg">
+              <span className="block text-[14px] font-semibold text-fg">
                 {t("delete.alsoTrash")}
               </span>
-              <span className="mt-0.5 block text-[11.5px] leading-[1.45] text-fg-muted">
+              <span className="mt-0.5 block text-[11px] leading-[1.45] text-fg-muted">
                 {t("delete.alsoTrashHint")}
               </span>
             </span>

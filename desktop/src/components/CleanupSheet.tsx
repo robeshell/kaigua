@@ -65,13 +65,13 @@ export function CleanupSheet({
           >
             {t("cleanup.title")}
           </h2>
-          <p className="mt-2 text-[13.5px] leading-[1.45] text-fg-secondary">
+          <p className="mt-2 text-[14px] leading-[1.45] text-fg-secondary">
             {t("cleanup.subtitle", { count: candidates.length })}
           </p>
         </header>
 
         <div className="flex shrink-0 items-center justify-between gap-2 border-b border-hairline px-6 py-2">
-          <label className="flex cursor-pointer items-center gap-2 text-[12.5px] text-fg-secondary">
+          <label className="flex cursor-pointer items-center gap-2 text-[13px] text-fg-secondary">
             <input
               type="checkbox"
               checked={selected.size === candidates.length && candidates.length > 0}
@@ -79,7 +79,7 @@ export function CleanupSheet({
             />
             {t("cleanup.selectAll")}
           </label>
-          <span className="text-[11.5px] text-fg-muted">
+          <span className="text-[11px] text-fg-muted">
             {t("cleanup.selectedBytes", {
               count: selected.size,
               size: formatBytes(totalSize),

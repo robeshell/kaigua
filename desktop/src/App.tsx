@@ -497,7 +497,7 @@ function App() {
                         {t("list.viewList")}
                       </button>
                     </div>
-                    <span className="text-[11.5px] text-fg-muted">
+                    <span className="text-[11px] text-fg-muted">
                       {visible.length}/{mediaItems.length}
                     </span>
                     <div className="kg-toolbar-spacer" />
@@ -765,17 +765,17 @@ function App() {
                                   ) : meta?.overview ? (
                                     <span className="kg-list-row-subtitle">{meta.overview}</span>
                                   ) : (
-                                    <span className="kg-list-row-subtitle font-mono text-[10.5px] text-fg-muted">
+                                    <span className="kg-list-row-subtitle font-mono text-[10px] text-fg-muted">
                                       {item.filePath || item.folderPath}
                                     </span>
                                   )}
                                 </span>
                                 {meta?.rating != null ? (
-                                  <span className="shrink-0 text-[12.5px] font-medium text-warning">
+                                  <span className="shrink-0 text-[13px] font-medium text-warning">
                                     {meta.rating.toFixed(1)}
                                   </span>
                                 ) : null}
-                                <span className="shrink-0 text-[12.5px] font-medium text-fg-secondary">
+                                <span className="shrink-0 text-[13px] font-medium text-fg-secondary">
                                   {t(`status.${item.status}`, { defaultValue: item.status })}
                                 </span>
                               </button>
@@ -1039,7 +1039,7 @@ function TasksDock({
           aria-label={t("tasks.title")}
         >
           <header className="flex items-center justify-between gap-2 border-b border-hairline px-3.5 py-2.5">
-            <h2 className="min-w-0 text-[13.5px] font-semibold text-fg">{t("tasks.title")}</h2>
+            <h2 className="min-w-0 text-[14px] font-semibold text-fg">{t("tasks.title")}</h2>
             <button
               type="button"
               className="kg-btn kg-btn-toolbar"
@@ -1050,13 +1050,13 @@ function TasksDock({
           </header>
           <div className="min-h-0 flex-1 overflow-auto px-2 py-2">
             {tasks.length === 0 ? (
-              <p className="px-2 py-6 text-center text-[11.5px] text-fg-secondary">
+              <p className="px-2 py-6 text-center text-[11px] text-fg-secondary">
                 {t("tasks.empty")}
               </p>
             ) : (
               <ul className="space-y-0.5">
                 {tasks.map((task) => (
-                  <li key={task.id} className="rounded-control px-2.5 py-2 text-[11.5px]">
+                  <li key={task.id} className="rounded-control px-2.5 py-2 text-[11px]">
                     <div className="flex justify-between gap-2">
                       <span className="min-w-0 flex-1 font-semibold text-fg">{task.title}</span>
                       <span className="shrink-0 text-fg-muted">
@@ -1238,7 +1238,7 @@ function SeasonBrowser({
         ) : null}
         <ul className="max-h-[min(320px,40vh)] space-y-0.5 overflow-auto">
           {eps.length === 0 ? (
-            <li className="text-[11.5px] text-fg-muted">{t("detail.noEpisodes")}</li>
+            <li className="text-[11px] text-fg-muted">{t("detail.noEpisodes")}</li>
           ) : (
             eps.map((ep) => {
               const stillCandidates = [
@@ -1401,7 +1401,7 @@ function DetailSkeleton({
 
   return (
     <div className="min-h-0 flex-1 overflow-auto p-4" aria-busy="true" aria-live="polite">
-      <p className="mb-3 text-[11.5px] text-fg-muted">{t("detail.loading")}</p>
+      <p className="mb-3 text-[11px] text-fg-muted">{t("detail.loading")}</p>
       <div className="flex gap-3">
         <div className="kg-skeleton h-[148px] w-[100px] shrink-0 rounded-card" />
         <div className="min-w-0 flex-1 space-y-2 pt-1">
@@ -1450,13 +1450,13 @@ function DetailPanel({
   const localEpisodes = episodes.filter((e) => Boolean(e.filePath)).length;
 
   return (
-    <div className="space-y-4 text-[13.5px]">
+    <div className="space-y-4 text-[14px]">
       <div className="flex gap-3">
         <div className="h-[148px] w-[100px] shrink-0 overflow-hidden rounded-card border border-hairline bg-subtle">
           {posterUrl ? (
             <img src={posterUrl} alt="" className="h-full w-full object-cover" />
           ) : (
-            <div className="flex h-full items-center justify-center text-[10.5px] text-fg-muted">
+            <div className="flex h-full items-center justify-center text-[10px] text-fg-muted">
               {t("detail.noPoster")}
             </div>
           )}
@@ -1477,12 +1477,12 @@ function DetailPanel({
             )}
           </div>
           {metadata?.tagline ? (
-            <p className="mt-1 text-[11.5px] italic text-fg-secondary">{metadata.tagline}</p>
+            <p className="mt-1 text-[11px] italic text-fg-secondary">{metadata.tagline}</p>
           ) : null}
           {item.originalTitle && item.originalTitle !== item.title ? (
-            <p className="mt-1 text-[11.5px] text-fg-secondary">{item.originalTitle}</p>
+            <p className="mt-1 text-[11px] text-fg-secondary">{item.originalTitle}</p>
           ) : null}
-          <p className="mt-2 text-[11.5px] text-fg-secondary">
+          <p className="mt-2 text-[11px] text-fg-secondary">
             {isShow
               ? [
                   item.year,
@@ -1506,16 +1506,16 @@ function DetailPanel({
                   .join(" · ")}
           </p>
           {metadata?.genres?.length ? (
-            <p className="mt-2 text-[11.5px] text-fg-muted">{metadata.genres.join(" / ")}</p>
+            <p className="mt-2 text-[11px] text-fg-muted">{metadata.genres.join(" / ")}</p>
           ) : null}
           {metadata?.rating != null ? (
-            <p className="mt-1 text-[12.5px] font-medium text-warning">
+            <p className="mt-1 text-[13px] font-medium text-warning">
               ★ {metadata.rating.toFixed(1)}
               {metadata.ratingVotes ? ` (${metadata.ratingVotes})` : null}
             </p>
           ) : null}
           {!isShow && metadata?.director ? (
-            <p className="mt-1 text-[11.5px] text-fg-secondary">
+            <p className="mt-1 text-[11px] text-fg-secondary">
               {t("detail.director")}: {metadata.director}
             </p>
           ) : null}
@@ -1547,16 +1547,16 @@ function DetailPanel({
 
       <section>
         <h3 className="kg-section-label">{t("detail.file")}</h3>
-        <p className="truncate font-mono text-[11.5px] text-fg-secondary" title={item.folderPath}>
+        <p className="truncate font-mono text-[11px] text-fg-secondary" title={item.folderPath}>
           {item.folderPath}
         </p>
         {!isShow && item.filePath && item.filePath !== item.folderPath ? (
-          <p className="mt-1 truncate font-mono text-[11.5px] text-fg-muted" title={item.filePath}>
+          <p className="mt-1 truncate font-mono text-[11px] text-fg-muted" title={item.filePath}>
             {fileNameUnderFolder(item.folderPath, item.filePath)}
           </p>
         ) : null}
         {metadata?.sourceId ? (
-          <p className="mt-2 text-[11.5px] text-fg-muted">source: {metadata.sourceId}</p>
+          <p className="mt-2 text-[11px] text-fg-muted">source: {metadata.sourceId}</p>
         ) : null}
       </section>
     </div>
@@ -1590,7 +1590,7 @@ function CastStrip({ credits }: { credits: CastMember[] }) {
               {actor.name}
             </p>
             {actor.role ? (
-              <p className="w-full truncate text-center text-[10.5px] text-fg-muted">{actor.role}</p>
+              <p className="w-full truncate text-center text-[10px] text-fg-muted">{actor.role}</p>
             ) : null}
           </li>
         ))}

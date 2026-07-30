@@ -153,7 +153,7 @@ export function ManualMatchModal({
                       {c.sourceId} · {(c.confidence * 100).toFixed(0)}%
                     </span>
                     {c.overview ? (
-                      <span className="mt-1 line-clamp-2 text-[11.5px] text-fg-muted">
+                      <span className="mt-1 line-clamp-2 text-[11px] text-fg-muted">
                         {c.overview}
                       </span>
                     ) : null}

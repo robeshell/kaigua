@@ -336,7 +336,7 @@ export function RenamerPage() {
       </header>
 
       {message ? (
-        <p className="shrink-0 border-b border-hairline bg-elevated px-5 py-2 text-[12.5px] text-fg-secondary">
+        <p className="shrink-0 border-b border-hairline bg-elevated px-5 py-2 text-[13px] text-fg-secondary">
           {message}
         </p>
       ) : null}
@@ -372,7 +372,7 @@ export function RenamerPage() {
           <p className="kg-section-label px-4">{t("renamer.files", { count: files.length })}</p>
           <ul className="min-h-0 flex-1 overflow-auto px-2 pb-4">
             {files.length === 0 ? (
-              <li className="px-2 py-6 text-center text-[12.5px] text-fg-muted">
+              <li className="px-2 py-6 text-center text-[13px] text-fg-muted">
                 {t("renamer.filesEmpty")}
               </li>
             ) : (
@@ -473,7 +473,7 @@ export function RenamerPage() {
           <p className="kg-section-label px-4 pt-3">{t("renamer.preview")}</p>
           <div className="min-h-0 flex-1 overflow-auto px-3 pb-4">
             <div className="kg-settings-group overflow-hidden">
-              <table className="w-full border-collapse text-left text-[12.5px]">
+              <table className="w-full border-collapse text-left text-[13px]">
                 <thead className="sticky top-0 bg-[var(--kg-group-fill)] text-fg-muted">
                   <tr>
                     <th className="px-3.5 py-2.5 font-semibold">{t("renamer.col.original")}</th>
@@ -537,7 +537,7 @@ function RuleEditor({
   return (
     <div className="rounded-card border border-hairline bg-[var(--kg-group-fill)] px-3 py-2.5">
       <div className="mb-2 flex items-center justify-between gap-2">
-        <span className="text-[12.5px] font-semibold text-fg-secondary">
+        <span className="text-[13px] font-semibold text-fg-secondary">
           #{index + 1} {t(`renamer.rule.${rule.type}`)}
         </span>
         <button type="button" className="kg-btn kg-btn-toolbar" onClick={onRemove}>
@@ -574,7 +574,7 @@ function RuleEditor({
             value={rule.text ?? ""}
             onChange={(e) => onChange({ text: e.target.value })}
           />
-          <label className="flex items-center gap-2 text-[11.5px] text-fg-secondary">
+          <label className="flex items-center gap-2 text-[11px] text-fg-secondary">
             {t("renamer.field.position")}
             <input
               className="kg-field kg-field-compact w-20"
@@ -587,7 +587,7 @@ function RuleEditor({
       )}
       {rule.type === "deleteRange" && (
         <div className="flex gap-2">
-          <label className="flex flex-1 items-center gap-1 text-[11.5px] text-fg-secondary">
+          <label className="flex flex-1 items-center gap-1 text-[11px] text-fg-secondary">
             {t("renamer.field.from")}
             <input
               className="kg-field kg-field-compact"
@@ -596,7 +596,7 @@ function RuleEditor({
               onChange={(e) => onChange({ from: Number(e.target.value) || 0 })}
             />
           </label>
-          <label className="flex flex-1 items-center gap-1 text-[11.5px] text-fg-secondary">
+          <label className="flex flex-1 items-center gap-1 text-[11px] text-fg-secondary">
             {t("renamer.field.length")}
             <input
               className="kg-field kg-field-compact"
@@ -622,7 +622,7 @@ function RuleEditor({
       )}
       {rule.type === "autoNumbering" && (
         <div className="grid grid-cols-2 gap-1.5">
-          <label className="flex items-center gap-1 text-[11.5px] text-fg-secondary">
+          <label className="flex items-center gap-1 text-[11px] text-fg-secondary">
             {t("renamer.field.startAt")}
             <input
               className="kg-field kg-field-compact"
@@ -631,7 +631,7 @@ function RuleEditor({
               onChange={(e) => onChange({ startAt: Number(e.target.value) || 0 })}
             />
           </label>
-          <label className="flex items-center gap-1 text-[11.5px] text-fg-secondary">
+          <label className="flex items-center gap-1 text-[11px] text-fg-secondary">
             {t("renamer.field.padding")}
             <input
               className="kg-field kg-field-compact"
@@ -657,7 +657,7 @@ function RuleEditor({
         </div>
       )}
       {rule.type === "stripBrackets" && (
-        <div className="flex flex-wrap gap-3 text-[11.5px] text-fg-secondary">
+        <div className="flex flex-wrap gap-3 text-[11px] text-fg-secondary">
           {(["square", "round", "curly"] as const).map((b) => {
             const checked = (rule.bracketTypes ?? []).includes(b);
             return (

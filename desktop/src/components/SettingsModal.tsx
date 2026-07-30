@@ -919,7 +919,7 @@ function LibraryRow({
             <p className="kg-settings-row-title truncate">{library.name}</p>
             <p className="kg-settings-row-sub truncate font-mono">{library.rootPath}</p>
             {!rootExists ? (
-              <p className="mt-1 text-[11.5px] font-semibold text-error">
+              <p className="mt-1 text-[11px] font-semibold text-error">
                 {t("settings.library.pathMissing")}
               </p>
             ) : null}
@@ -991,7 +991,7 @@ function ScrapeExclusionsSection() {
 
   return (
     <>
-      <p className="mb-2 px-1 text-[11.5px] leading-[1.45] text-fg-secondary">
+      <p className="mb-2 px-1 text-[11px] leading-[1.45] text-fg-secondary">
         {t("settings.exclusions.hint")}
       </p>
       <div className="kg-settings-group">
@@ -1002,7 +1002,7 @@ function ScrapeExclusionsSection() {
         ) : (
           folders.map((name) => (
             <div key={name} className="kg-settings-row" style={{ minHeight: 54 }}>
-              <span className="font-mono text-[12.5px] text-fg">{name}</span>
+              <span className="font-mono text-[13px] text-fg">{name}</span>
               <button type="button" onClick={() => remove(name)} className="kg-btn kg-btn-destructive">
                 {t("common.remove")}
               </button>
@@ -1024,7 +1024,7 @@ function ScrapeExclusionsSection() {
           {t("common.add")}
         </button>
       </div>
-      {message ? <p className="mt-2 text-[11.5px] text-fg-secondary">{message}</p> : null}
+      {message ? <p className="mt-2 text-[11px] text-fg-secondary">{message}</p> : null}
     </>
   );
 }
