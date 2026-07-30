@@ -241,9 +241,9 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 10.5px;
+  font-size: 10px;
   font-weight: 650;
-  line-height: 1.15;
+  line-height: 1.2;
   text-align: center;
 }
 
