@@ -1115,6 +1115,12 @@ select:focus-visible {
   padding: 8px var(--kg-page-gutter) var(--kg-content-bottom-padding);
 }
 
+/* Settings page sits on a slightly greyer canvas so the pure-white group
+   cards separate without borders or shadows (patterns/settings-page.md). */
+.kg-settings-page {
+  background: var(--kg-settings-canvas);
+}
+
 /* ── Settings groups (patterns/settings-page.md) ── */
 .kg-settings-section {
   margin-bottom: 28px;
@@ -1126,7 +1132,6 @@ select:focus-visible {
 
 .kg-settings-group {
   border-radius: var(--kg-radius-card);
-  border: 1px solid var(--kg-hairline);
   background: var(--kg-group-fill);
   overflow: hidden;
 }
@@ -1142,16 +1147,16 @@ select:focus-visible {
   right: 14px;
   left: 14px;
   height: 1px;
-  background: var(--kg-hairline);
+  background: var(--kg-settings-row-divider, var(--kg-hairline));
 }
 
 .kg-settings-row {
   display: flex;
-  min-height: 64px;
+  min-height: 52px;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 8px 14px;
+  padding: 6px 14px;
 }
 
 .kg-settings-row-text {
@@ -1287,13 +1292,14 @@ select:focus-visible {
 /* Skin cards (settings-page SkinCard) */
 .kg-skin-strip {
   display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-  padding: 14px;
+  gap: 12px;
+  padding: 14px 16px;
+  overflow-x: auto;
 }
 
 .kg-skin-card {
-  width: 124px;
+  width: 104px;
+  flex-shrink: 0;
   padding: 0;
   border: none;
   background: transparent;
@@ -1309,8 +1315,8 @@ select:focus-visible {
 .kg-skin-card-preview {
   position: relative;
   display: flex;
-  width: 124px;
-  height: 80px;
+  width: 104px;
+  height: 68px;
   align-items: center;
   justify-content: center;
   overflow: hidden;

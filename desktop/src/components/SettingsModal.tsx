@@ -26,7 +26,7 @@ export function SettingsPage({ onClose }: { onClose: () => void }) {
   }, [onClose]);
 
   return (
-    <div className="min-h-0 flex-1 overflow-auto">
+    <div className="kg-settings-page min-h-0 flex-1 overflow-auto">
       <div className="kg-page-shell">
         <header className="kg-page-header">
           <div className="min-w-0 flex-1">
