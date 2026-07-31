@@ -830,7 +830,7 @@ function LibrarySection() {
 
       <div className="kg-settings-group">
         {filtered.length === 0 ? (
-          <div className="px-3.5 py-8 text-center text-[12px] text-fg-muted">
+          <div className="px-3.5 py-8 text-center kg-type-body-secondary text-fg-muted">
             {t("settings.library.empty")}
           </div>
         ) : (
@@ -919,7 +919,7 @@ function LibraryRow({
             <p className="kg-settings-row-title truncate">{library.name}</p>
             <p className="kg-settings-row-sub truncate font-mono">{library.rootPath}</p>
             {!rootExists ? (
-              <p className="mt-1 text-[11px] font-semibold text-error">
+              <p className="mt-1 kg-type-caption font-semibold text-error">
                 {t("settings.library.pathMissing")}
               </p>
             ) : null}
@@ -991,18 +991,18 @@ function ScrapeExclusionsSection() {
 
   return (
     <>
-      <p className="mb-2 px-1 text-[11px] leading-[1.45] text-fg-secondary">
+      <p className="mb-2 px-1 kg-type-caption leading-[1.45] text-fg-secondary">
         {t("settings.exclusions.hint")}
       </p>
       <div className="kg-settings-group">
         {folders.length === 0 ? (
-          <div className="px-3.5 py-6 text-center text-[12px] text-fg-muted">
+          <div className="px-3.5 py-6 text-center kg-type-body-secondary text-fg-muted">
             {t("settings.exclusions.empty")}
           </div>
         ) : (
           folders.map((name) => (
             <div key={name} className="kg-settings-row" style={{ minHeight: 54 }}>
-              <span className="font-mono text-[13px] text-fg">{name}</span>
+              <span className="font-mono kg-type-body-secondary text-fg">{name}</span>
               <button type="button" onClick={() => remove(name)} className="kg-btn kg-btn-destructive">
                 {t("common.remove")}
               </button>
@@ -1024,7 +1024,7 @@ function ScrapeExclusionsSection() {
           {t("common.add")}
         </button>
       </div>
-      {message ? <p className="mt-2 text-[11px] text-fg-secondary">{message}</p> : null}
+      {message ? <p className="mt-2 kg-type-caption text-fg-secondary">{message}</p> : null}
     </>
   );
 }

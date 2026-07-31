@@ -39,6 +39,89 @@
   --font-sans: var(--kg-font);
 }
 
+.kg-type-display,
+.kg-type-page-title,
+.kg-type-section-title,
+.kg-type-title,
+.kg-type-body,
+.kg-type-body-secondary,
+.kg-type-list-title,
+.kg-type-label,
+.kg-type-caption,
+.kg-type-caption-small {
+  font-style: normal;
+}
+
+.kg-type-display {
+  font-size: var(--kg-type-display-large-size);
+  font-weight: var(--kg-type-display-large-weight);
+  line-height: var(--kg-type-display-large-line-height);
+  letter-spacing: var(--kg-type-display-large-tracking);
+}
+
+.kg-type-page-title {
+  font-size: var(--kg-type-page-title-size);
+  font-weight: var(--kg-type-page-title-weight);
+  line-height: var(--kg-type-page-title-line-height);
+  letter-spacing: var(--kg-type-page-title-tracking);
+}
+
+.kg-type-section-title {
+  font-size: var(--kg-type-section-title-size);
+  font-weight: var(--kg-type-section-title-weight);
+  line-height: var(--kg-type-section-title-line-height);
+  letter-spacing: var(--kg-type-section-title-tracking);
+}
+
+.kg-type-title {
+  font-size: var(--kg-type-title-size);
+  font-weight: var(--kg-type-title-weight);
+  line-height: var(--kg-type-title-line-height);
+  letter-spacing: var(--kg-type-title-tracking);
+}
+
+.kg-type-body {
+  font-size: var(--kg-type-body-size);
+  font-weight: var(--kg-type-body-weight);
+  line-height: var(--kg-type-body-line-height);
+  letter-spacing: var(--kg-type-body-tracking);
+}
+
+.kg-type-body-secondary {
+  font-size: var(--kg-type-body-secondary-size);
+  font-weight: var(--kg-type-body-secondary-weight);
+  line-height: var(--kg-type-body-secondary-line-height);
+  letter-spacing: var(--kg-type-body-secondary-tracking);
+}
+
+.kg-type-list-title {
+  font-size: var(--kg-type-list-title-size);
+  font-weight: var(--kg-type-list-title-weight);
+  line-height: var(--kg-type-list-title-line-height);
+  letter-spacing: var(--kg-type-list-title-tracking);
+}
+
+.kg-type-label {
+  font-size: var(--kg-type-label-size);
+  font-weight: var(--kg-type-label-weight);
+  line-height: var(--kg-type-label-line-height);
+  letter-spacing: var(--kg-type-label-tracking);
+}
+
+.kg-type-caption {
+  font-size: var(--kg-type-caption-size);
+  font-weight: var(--kg-type-caption-weight);
+  line-height: var(--kg-type-caption-line-height);
+  letter-spacing: var(--kg-type-caption-tracking);
+}
+
+.kg-type-caption-small {
+  font-size: var(--kg-type-caption-small-size);
+  font-weight: var(--kg-type-caption-small-weight);
+  line-height: var(--kg-type-caption-small-line-height);
+  letter-spacing: var(--kg-type-caption-small-tracking);
+}
+
 :root {
   color-scheme: light;
   font-family: var(--kg-font);
@@ -241,7 +324,7 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 10px;
+  font-size: var(--kg-type-caption-small-size);
   font-weight: 650;
   line-height: 1.2;
   text-align: center;
@@ -354,7 +437,7 @@ select:focus-visible {
   border: none;
   background: var(--kg-subtle-fill);
   color: var(--kg-accent);
-  font-size: 12px;
+  font-size: var(--kg-type-body-secondary-size);
   font-weight: 700;
   cursor: pointer;
   box-shadow: none;
@@ -378,7 +461,7 @@ select:focus-visible {
   padding: 0 10px;
   background: transparent;
   color: var(--kg-text-secondary);
-  font-size: 12px;
+  font-size: var(--kg-type-body-secondary-size);
   font-weight: 600;
 }
 
@@ -449,7 +532,7 @@ select:focus-visible {
   background: var(--kg-subtle-fill);
   padding: 10px 14px;
   color: var(--kg-text-primary);
-  font-size: 14px;
+  font-size: var(--kg-type-body-size);
   line-height: 1.3;
   outline: none;
   box-shadow: none;
@@ -470,7 +553,7 @@ select:focus-visible {
 .kg-field-compact {
   height: 32px;
   padding: 0 12px;
-  font-size: 13px;
+  font-size: var(--kg-type-body-secondary-size);
 }
 
 .kg-field-compact:focus,
@@ -489,7 +572,7 @@ select:focus-visible {
   background-size: 12px;
   padding: 10px 34px 10px 14px;
   color: var(--kg-text-primary);
-  font-size: 14px;  line-height: 1.3;
+  font-size: var(--kg-type-body-size);  line-height: 1.3;
   outline: none;
   box-shadow: none;
   appearance: none;
@@ -499,7 +582,7 @@ select:focus-visible {
 
 /* 工具栏里的紧凑下拉与 kg-field-compact 同档（12.5），不大过相邻输入框。 */
 .kg-select.kg-field-compact {
-  font-size: 13px;
+  font-size: var(--kg-type-body-secondary-size);
 }
 
 .kg-select:focus,
@@ -517,7 +600,7 @@ select:focus-visible {
 .kg-select.kg-field-compact {
   height: 32px;
   padding: 0 30px 0 12px;
-  font-size: 13px;
+  font-size: var(--kg-type-body-secondary-size);
   background-position: right 10px center;
 }
 
@@ -540,7 +623,7 @@ select:focus-visible {
   border: none;
   background: var(--kg-subtle-fill-quiet);
   color: color-mix(in srgb, var(--kg-text-secondary) 82%, transparent);
-  font-size: 12px;
+  font-size: var(--kg-type-body-secondary-size);
   font-weight: 600;
   cursor: pointer;
 }
@@ -587,7 +670,7 @@ select:focus-visible {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 14px;
+  font-size: var(--kg-type-body-size);
   font-weight: 600;
   color: var(--kg-text-primary);
 }
@@ -598,7 +681,7 @@ select:focus-visible {
   text-overflow: ellipsis;
   white-space: nowrap;
   margin-top: 2px;
-  font-size: 11px;
+  font-size: var(--kg-type-caption-size);
   line-height: 1.45;
   color: var(--kg-text-secondary);
 }
@@ -612,7 +695,7 @@ select:focus-visible {
   border-radius: var(--kg-radius-pill);
   background: var(--kg-subtle-fill);
   color: var(--kg-text-secondary);
-  font-size: 10px;
+  font-size: var(--kg-type-caption-small-size);
   font-weight: 700;
   letter-spacing: 0.02em;
 }
@@ -742,7 +825,7 @@ select:focus-visible {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 11px;
+  font-size: var(--kg-type-caption-size);
   font-weight: 650;
   letter-spacing: -0.15px;
   line-height: 1.25;
@@ -753,7 +836,7 @@ select:focus-visible {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 10px;
+  font-size: var(--kg-type-caption-small-size);
   font-weight: 500;
   line-height: 1.25;
   color: var(--kg-text-muted);
@@ -770,7 +853,7 @@ select:focus-visible {
 }
 
 .kg-season-panel-title {
-  font-size: 13px;
+  font-size: var(--kg-type-body-secondary-size);
   font-weight: 700;
   letter-spacing: -0.2px;
   color: var(--kg-text-primary);
@@ -778,14 +861,14 @@ select:focus-visible {
 
 .kg-season-panel-meta {
   margin-left: 8px;
-  font-size: 12px;
+  font-size: var(--kg-type-body-secondary-size);
   font-weight: 500;
   color: var(--kg-text-muted);
 }
 
 .kg-season-panel-overview {
   margin: 0 0 8px;
-  font-size: 11px;
+  font-size: var(--kg-type-caption-size);
   line-height: 1.45;
   color: var(--kg-text-secondary);
 }
@@ -834,7 +917,7 @@ select:focus-visible {
   border-radius: var(--kg-radius-pill);
   background: transparent;
   color: var(--kg-text-secondary);
-  font-size: 11px;
+  font-size: var(--kg-type-caption-size);
   font-weight: 600;
   cursor: pointer;
 }
@@ -915,7 +998,7 @@ select:focus-visible {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 12px;
+  font-size: var(--kg-type-body-secondary-size);
   font-weight: 700;
   color: var(--kg-text-primary);
 }
@@ -924,7 +1007,7 @@ select:focus-visible {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 10px;
+  font-size: var(--kg-type-caption-small-size);
   color: var(--kg-text-muted);
 }
 
@@ -961,7 +1044,7 @@ select:focus-visible {
   display: flex;
   max-height: min(720px, calc(100vh - 48px));
   width: 100%;
-  max-width: min(var(--kg-dialog-max), 94vw);
+  max-width: min(var(--kg-dialog-width), 94vw);
   flex-direction: column;
   overflow: hidden;
   border-radius: var(--kg-radius-dialog);
@@ -1020,7 +1103,7 @@ select:focus-visible {
   border: none;
   background: transparent;
   color: var(--kg-text-primary);
-  font-size: 14px;
+  font-size: var(--kg-type-body-size);
   font-weight: 600;
   text-align: left;
   cursor: pointer;
@@ -1092,7 +1175,7 @@ select:focus-visible {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: var(--kg-page-title-size);
+  font-size: var(--kg-type-page-title-size);
   font-weight: 800;
   letter-spacing: -0.55px;
   color: var(--kg-text-primary);
@@ -1100,7 +1183,7 @@ select:focus-visible {
 
 .kg-page-header-sub {
   margin: 4px 0 0;
-  font-size: 13px;
+  font-size: var(--kg-type-body-secondary-size);
   color: var(--kg-text-secondary);
 }
 
@@ -1170,14 +1253,14 @@ select:focus-visible {
 
 .kg-settings-row-title {
   margin: 0;
-  font-size: 14px;
+  font-size: var(--kg-type-body-size);
   font-weight: 600;
   color: var(--kg-text-primary);
 }
 
 .kg-settings-row-sub {
   margin: 2px 0 0;
-  font-size: 11px;
+  font-size: var(--kg-type-caption-size);
   color: var(--kg-text-secondary);
 }
 
@@ -1185,7 +1268,7 @@ select:focus-visible {
   display: block;
   margin: 0;
   padding: 12px 14px 2px;
-  font-size: 13px;
+  font-size: var(--kg-type-body-secondary-size);
   font-weight: 600;
   color: var(--kg-text-secondary);
 }
@@ -1209,7 +1292,7 @@ select:focus-visible {
 
 .kg-section-label {
   margin: 0 0 8px 4px;
-  font-size: 13px;
+  font-size: var(--kg-type-body-secondary-size);
   font-weight: 600;
   letter-spacing: 0.15px;
   color: var(--kg-text-secondary);
@@ -1402,7 +1485,7 @@ select:focus-visible {
 
 .kg-skin-card-label {
   margin-top: 6px;
-  font-size: 12px;
+  font-size: var(--kg-type-body-secondary-size);
   font-weight: 500;
   color: var(--kg-text-secondary);
 }
@@ -1458,7 +1541,7 @@ select:focus-visible {
   padding: 4px 0;
   list-style: none;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 11px;
+  font-size: var(--kg-type-caption-size);
   line-height: 1.45;
 }
 
@@ -1499,7 +1582,7 @@ select:focus-visible {
 
 .kg-rail-brand-name {
   margin: 0;
-  font-size: 17px;
+  font-size: var(--kg-type-title-size);
   font-weight: 800;
   letter-spacing: -0.35px;
   line-height: 1.2;
@@ -1517,7 +1600,7 @@ select:focus-visible {
 .kg-rail-group-label {
   margin: 0;
   padding: 13px 10px 3px;
-  font-size: 10px;
+  font-size: var(--kg-type-caption-small-size);
   font-weight: 800;
   letter-spacing: 0.8px;
   text-transform: none;
@@ -1527,7 +1610,7 @@ select:focus-visible {
 .kg-rail-empty {
   margin: 0;
   padding: 6px 10px 10px;
-  font-size: 11px;
+  font-size: var(--kg-type-caption-size);
   color: var(--kg-text-muted);
 }
 
@@ -1600,7 +1683,7 @@ select:focus-visible {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 14px;
+  font-size: var(--kg-type-body-size);
   font-weight: 500;
   letter-spacing: -0.15px;
   line-height: 1.2;
@@ -1617,7 +1700,7 @@ select:focus-visible {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 10px;
+  font-size: var(--kg-type-caption-small-size);
   font-weight: 500;
   line-height: 1.2;
   color: var(--kg-text-muted);
@@ -1660,7 +1743,7 @@ select:focus-visible {
   min-height: 36px;
   padding: 0 14px;
   border-radius: 999px;
-  font-size: 13px;
+  font-size: var(--kg-type-body-secondary-size);
   font-weight: 650;
   color: var(--kg-text-primary);
   cursor: pointer;
@@ -1685,13 +1768,13 @@ select:focus-visible {
   border-radius: 999px;
   background: var(--kg-accent);
   color: #fff;
-  font-size: 11px;
+  font-size: var(--kg-type-caption-size);
   font-weight: 700;
   line-height: 1;
 }
 
 .kg-tasks-count {
-  font-size: 11px;
+  font-size: var(--kg-type-caption-size);
   font-weight: 600;
   color: var(--kg-text-muted);
 }

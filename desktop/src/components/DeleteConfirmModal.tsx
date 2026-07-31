@@ -29,11 +29,11 @@ export function DeleteConfirmModal({
         <header className="kg-dialog-header">
           <h2
             id="delete-confirm-title"
-            className="truncate text-[20px] font-extrabold tracking-[-0.25px] text-fg"
+            className="truncate kg-type-section-title font-extrabold tracking-[-0.25px] text-fg"
           >
             {t("delete.title")}
           </h2>
-          <p className="mt-2 text-[14px] leading-[1.45] text-fg-secondary">
+          <p className="mt-2 kg-type-body leading-[1.45] text-fg-secondary">
             {t("delete.message", { title })}
           </p>
         </header>
@@ -46,10 +46,10 @@ export function DeleteConfirmModal({
               className="mt-0.5"
             />
             <span className="min-w-0">
-              <span className="block text-[14px] font-semibold text-fg">
+              <span className="block kg-type-body font-semibold text-fg">
                 {t("delete.alsoTrash")}
               </span>
-              <span className="mt-0.5 block text-[11px] leading-[1.45] text-fg-muted">
+              <span className="mt-0.5 block kg-type-caption leading-[1.45] text-fg-muted">
                 {t("delete.alsoTrashHint")}
               </span>
             </span>

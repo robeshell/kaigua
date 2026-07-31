@@ -61,17 +61,17 @@ export function CleanupSheet({
         <header className="kg-dialog-header shrink-0">
           <h2
             id="cleanup-title"
-            className="truncate text-[20px] font-extrabold tracking-[-0.25px] text-fg"
+            className="truncate kg-type-section-title font-extrabold tracking-[-0.25px] text-fg"
           >
             {t("cleanup.title")}
           </h2>
-          <p className="mt-2 text-[14px] leading-[1.45] text-fg-secondary">
+          <p className="mt-2 kg-type-body leading-[1.45] text-fg-secondary">
             {t("cleanup.subtitle", { count: candidates.length })}
           </p>
         </header>
 
         <div className="flex shrink-0 items-center justify-between gap-2 border-b border-hairline px-6 py-2">
-          <label className="flex cursor-pointer items-center gap-2 text-[13px] text-fg-secondary">
+          <label className="flex cursor-pointer items-center gap-2 kg-type-body-secondary text-fg-secondary">
             <input
               type="checkbox"
               checked={selected.size === candidates.length && candidates.length > 0}
@@ -79,7 +79,7 @@ export function CleanupSheet({
             />
             {t("cleanup.selectAll")}
           </label>
-          <span className="text-[11px] text-fg-muted">
+          <span className="kg-type-caption text-fg-muted">
             {t("cleanup.selectedBytes", {
               count: selected.size,
               size: formatBytes(totalSize),
@@ -98,10 +98,10 @@ export function CleanupSheet({
                   onChange={() => toggle(c.path)}
                 />
                 <span className="min-w-0 flex-1">
-                  <span className="block truncate text-[13px] font-semibold text-fg">
+                  <span className="block truncate kg-type-body-secondary font-semibold text-fg">
                     {basename(c.path)}
                   </span>
-                  <span className="mt-0.5 block truncate text-[11px] text-fg-muted" title={c.path}>
+                  <span className="mt-0.5 block truncate kg-type-caption text-fg-muted" title={c.path}>
                     {c.itemTitle} · {c.path}
                   </span>
                 </span>

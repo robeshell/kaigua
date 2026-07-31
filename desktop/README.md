@@ -14,7 +14,19 @@ pnpm install
 pnpm tauri dev
 ```
 
-## 打包（beta）
+## Typography
+
+Kaigua's UI typography comes from the generated Kai Design roles in
+`src/styles/brand.generated.css`. `src/main.tsx` activates the desktop
+component profile on the document root, and `src/index.css` exposes stable
+`.kg-type-*` aliases for React components to consume.
+
+`src/styles/tokens.css` is reserved for Kaigua-specific compatibility and
+layout variables; it must not duplicate generated brand variables. Application
+CSS and TSX must not introduce numeric `font-size` declarations or Tailwind
+`text-[Npx]` classes. `npm run tokens:check` enforces both the generated/product
+variable boundary and this typography boundary.
+
 
 详见 [docs/packaging.md](../docs/packaging.md)。
 

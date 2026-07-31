@@ -39,8 +39,8 @@ export function EmptyState({
             <path d="M10 12h4" />
           </svg>
         ) : null}
-        <p className="text-[16px] font-semibold leading-snug text-fg/88">{title}</p>
-        <p className="mt-1.5 text-[12px] leading-[1.45] text-fg-muted/76">{message}</p>
+        <p className="kg-type-title font-semibold leading-snug text-fg/88">{title}</p>
+        <p className="mt-1.5 kg-type-body-secondary leading-[1.45] text-fg-muted/76">{message}</p>
         {action ? <div className="mt-3.5 flex justify-center">{action}</div> : null}
       </div>
     </div>

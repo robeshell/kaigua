@@ -14,6 +14,7 @@ import {
 import i18n from "./i18n";
 import "./index.css";
 
+document.documentElement.dataset.componentProfile = "desktop";
 document.documentElement.dataset.windowChrome = isImmersiveWindow()
   ? "immersive"
   : "native";

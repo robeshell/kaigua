@@ -95,7 +95,7 @@ export function ManualMatchModal({
         <header className="kg-dialog-header flex items-center justify-between gap-3">
           <h2
             id="manual-match-title"
-            className="truncate text-[20px] font-extrabold tracking-[-0.25px] text-fg"
+            className="truncate kg-type-section-title font-extrabold tracking-[-0.25px] text-fg"
           >
             {t("action.manualMatch")}
           </h2>
@@ -126,7 +126,7 @@ export function ManualMatchModal({
 
         <ul className="kg-dialog-body !px-3">
           {candidates.length === 0 ? (
-            <li className="px-2 py-8 text-center text-[12px] text-fg-muted">
+            <li className="px-2 py-8 text-center kg-type-body-secondary text-fg-muted">
               {loading
                 ? t("match.searching")
                 : searched
@@ -153,7 +153,7 @@ export function ManualMatchModal({
                       {c.sourceId} · {(c.confidence * 100).toFixed(0)}%
                     </span>
                     {c.overview ? (
-                      <span className="mt-1 line-clamp-2 text-[11px] text-fg-muted">
+                      <span className="mt-1 line-clamp-2 kg-type-caption text-fg-muted">
                         {c.overview}
                       </span>
                     ) : null}

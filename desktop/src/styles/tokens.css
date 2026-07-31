@@ -23,7 +23,6 @@
   --kg-skeleton-a: rgb(0 0 0 / 0.04);
   --kg-skeleton-b: rgb(0 0 0 / 0.08);
   --kg-on-accent: #ffffff;
-  --kg-error: #dc2626;
   --kg-destructive-fill: rgb(220 38 38 / 0.08);
   --kg-destructive-hover: rgb(220 38 38 / 0.12);
   --kg-chrome-rail-shadow: 1px 0 6px rgb(0 0 0 / 0.06);
@@ -45,7 +44,6 @@
   --kg-skeleton-a: rgb(24 32 42 / 0.04);
   --kg-skeleton-b: rgb(24 32 42 / 0.08);
   --kg-on-accent: #ffffff;
-  --kg-error: #dc2626;
   --kg-destructive-fill: rgb(220 38 38 / 0.08);
   --kg-destructive-hover: rgb(220 38 38 / 0.12);
   --kg-chrome-rail-shadow: none;
@@ -67,16 +65,14 @@
   --kg-skeleton-a: rgb(255 255 255 / 0.04);
   --kg-skeleton-b: rgb(255 255 255 / 0.09);
   --kg-on-accent: #ffffff;
-  --kg-error: #f87171;
   --kg-destructive-fill: rgb(248 113 113 / 0.12);
   --kg-destructive-hover: rgb(248 113 113 / 0.18);
   --kg-chrome-rail-shadow: 1px 0 6px rgb(0 0 0 / 0.28);
 }
 
 :root {
-  --kg-page-title-size: 28px;
   --kg-detail-width: 22rem;
-  --kg-dialog-max: 520px;
+  --kg-dialog-width: 520px;
   --kg-titlebar-height: 28px;
   --kg-rail-top: 38px;
   --kg-caption-width: 0px;

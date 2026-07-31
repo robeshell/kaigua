@@ -44,7 +44,7 @@ export function ActorAvatar({ url, name, size = 48 }: ActorAvatarProps) {
         <img src={src} alt="" className="h-full w-full object-cover" loading="lazy" />
       ) : (
         <span
-          className="flex h-full w-full items-center justify-center text-[12px] font-semibold text-fg-muted"
+          className="flex h-full w-full items-center justify-center kg-type-body-secondary font-semibold text-fg-muted"
           aria-hidden
         >
           {letter}
