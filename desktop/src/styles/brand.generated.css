@@ -1,6 +1,6 @@
 /* GENERATED FILE — DO NOT EDIT.
  * Source: kai-brand-design/tokens/*.json
- * specVersion: 0.4.5 · sha256: 05dd9d6c1df2d95970b150e34dc112e18755de30c206911ae5bd02e8e1ffbcba
+ * specVersion: 0.7.1 · sha256: 997bd0f0aa4bee02e5783b77270971cc0fd01e4ebf0c0b71c5fc391e7b0cba99
  */
 
 :root,
@@ -22,7 +22,10 @@
   --kg-border: rgb(0 0 0 / 0.08);
   --kg-subtle-fill: rgb(0 0 0 / 0.045);
   --kg-barrier: rgb(0 0 0 / 0.38);
-  --kg-warning: #b07514;
+  --kg-warning: #9a640d;
+  --kg-success: #237a57;
+  --kg-error: #b42318;
+  --kg-info: #2563a6;
   --kg-glass-blur: 20px;
   --kg-glass-shadow: 0 8px 28px rgb(0 0 0 / 0.09);
 }
@@ -45,7 +48,10 @@
   --kg-border: rgb(0 0 0 / 0.08);
   --kg-subtle-fill: rgb(0 0 0 / 0.045);
   --kg-barrier: rgb(0 0 0 / 0.38);
-  --kg-warning: #b07514;
+  --kg-warning: #9a640d;
+  --kg-success: #237a57;
+  --kg-error: #b42318;
+  --kg-info: #2563a6;
   --kg-glass-blur: 0px;
   --kg-glass-shadow: none;
 }
@@ -69,6 +75,9 @@
   --kg-subtle-fill: rgb(255 255 255 / 0.055);
   --kg-barrier: rgb(0 0 0 / 0.62);
   --kg-warning: #e3ac45;
+  --kg-success: #5bc89a;
+  --kg-error: #ff7b72;
+  --kg-info: #73a7e8;
   --kg-glass-blur: 20px;
   --kg-glass-shadow: 0 8px 28px rgb(0 0 0 / 0.42);
 }
@@ -88,6 +97,174 @@
   --kg-page-gutter: 24px;
   --kg-content-bottom-padding: 96px;
   --kg-settings-max: 920px;
+  --kg-content-reading-max: 680px;
+  --kg-content-form-max: 720px;
+  --kg-content-standard-max: 920px;
+  --kg-content-wide-max: 1200px;
+  --kg-detail-pane-min: 360px;
+  --kg-detail-pane-preferred: 420px;
+  --kg-detail-pane-max: 520px;
+  --kg-icon-compact: 16px;
+  --kg-icon-regular: 20px;
+  --kg-icon-large: 24px;
+  --kg-icon-display: 32px;
+  --kg-dialog-max: 520px;
+  --kg-sheet-max: 760px;
+  --kg-menu-min: 160px;
+  --kg-menu-max: 280px;
+  --kg-type-display-large-size: 32px;
+  --kg-type-display-large-line-height: 40px;
+  --kg-type-display-large-weight: 600;
+  --kg-type-display-large-tracking: 0px;
+  --kg-type-page-title-size: 24px;
+  --kg-type-page-title-line-height: 32px;
+  --kg-type-page-title-weight: 600;
+  --kg-type-page-title-tracking: 0px;
+  --kg-type-section-title-size: 18px;
+  --kg-type-section-title-line-height: 24px;
+  --kg-type-section-title-weight: 600;
+  --kg-type-section-title-tracking: 0px;
+  --kg-type-title-size: 14px;
+  --kg-type-title-line-height: 20px;
+  --kg-type-title-weight: 600;
+  --kg-type-title-tracking: 0px;
+  --kg-type-body-size: 14px;
+  --kg-type-body-line-height: 20px;
+  --kg-type-body-weight: 400;
+  --kg-type-body-tracking: 0px;
+  --kg-type-body-secondary-size: 12px;
+  --kg-type-body-secondary-line-height: 18px;
+  --kg-type-body-secondary-weight: 400;
+  --kg-type-body-secondary-tracking: 0px;
+  --kg-type-list-title-size: 14px;
+  --kg-type-list-title-line-height: 20px;
+  --kg-type-list-title-weight: 500;
+  --kg-type-list-title-tracking: 0px;
+  --kg-type-label-size: 14px;
+  --kg-type-label-line-height: 20px;
+  --kg-type-label-weight: 600;
+  --kg-type-label-tracking: 0px;
+  --kg-type-caption-size: 12px;
+  --kg-type-caption-line-height: 16px;
+  --kg-type-caption-weight: 400;
+  --kg-type-caption-tracking: 0px;
+  --kg-type-caption-small-size: 11px;
+  --kg-type-caption-small-line-height: 16px;
+  --kg-type-caption-small-weight: 500;
+  --kg-type-caption-small-tracking: 0px;
+  --kg-metric-minimum-interactive-target: 32px;
+  --kg-metric-control-height: 36px;
+  --kg-metric-compact-control-height: 32px;
+  --kg-metric-list-row-single: 40px;
+  --kg-metric-list-row-double: 52px;
+  --kg-metric-page-gutter: 24px;
+  --kg-metric-section-gap: 24px;
+  --kg-metric-control-gap: 8px;
+  --kg-metric-icon-text-gap: 8px;
+}
+
+[data-component-profile="mobile"] {
+  --kg-type-display-large-size: 34px;
+  --kg-type-display-large-line-height: 42px;
+  --kg-type-display-large-weight: 600;
+  --kg-type-display-large-tracking: 0px;
+  --kg-type-page-title-size: 28px;
+  --kg-type-page-title-line-height: 36px;
+  --kg-type-page-title-weight: 600;
+  --kg-type-page-title-tracking: 0px;
+  --kg-type-section-title-size: 22px;
+  --kg-type-section-title-line-height: 28px;
+  --kg-type-section-title-weight: 600;
+  --kg-type-section-title-tracking: 0px;
+  --kg-type-title-size: 17px;
+  --kg-type-title-line-height: 24px;
+  --kg-type-title-weight: 600;
+  --kg-type-title-tracking: 0px;
+  --kg-type-body-size: 17px;
+  --kg-type-body-line-height: 24px;
+  --kg-type-body-weight: 400;
+  --kg-type-body-tracking: 0px;
+  --kg-type-body-secondary-size: 15px;
+  --kg-type-body-secondary-line-height: 20px;
+  --kg-type-body-secondary-weight: 400;
+  --kg-type-body-secondary-tracking: 0px;
+  --kg-type-list-title-size: 14px;
+  --kg-type-list-title-line-height: 20px;
+  --kg-type-list-title-weight: 500;
+  --kg-type-list-title-tracking: 0px;
+  --kg-type-label-size: 16px;
+  --kg-type-label-line-height: 22px;
+  --kg-type-label-weight: 600;
+  --kg-type-label-tracking: 0px;
+  --kg-type-caption-size: 13px;
+  --kg-type-caption-line-height: 18px;
+  --kg-type-caption-weight: 400;
+  --kg-type-caption-tracking: 0px;
+  --kg-type-caption-small-size: 11px;
+  --kg-type-caption-small-line-height: 16px;
+  --kg-type-caption-small-weight: 500;
+  --kg-type-caption-small-tracking: 0px;
+  --kg-metric-minimum-interactive-target: 48px;
+  --kg-metric-control-height: 48px;
+  --kg-metric-compact-control-height: 40px;
+  --kg-metric-list-row-single: 52px;
+  --kg-metric-list-row-double: 68px;
+  --kg-metric-page-gutter: 16px;
+  --kg-metric-section-gap: 24px;
+  --kg-metric-control-gap: 12px;
+  --kg-metric-icon-text-gap: 8px;
+}
+
+[data-component-profile="desktop"] {
+  --kg-type-display-large-size: 32px;
+  --kg-type-display-large-line-height: 40px;
+  --kg-type-display-large-weight: 600;
+  --kg-type-display-large-tracking: 0px;
+  --kg-type-page-title-size: 24px;
+  --kg-type-page-title-line-height: 32px;
+  --kg-type-page-title-weight: 600;
+  --kg-type-page-title-tracking: 0px;
+  --kg-type-section-title-size: 18px;
+  --kg-type-section-title-line-height: 24px;
+  --kg-type-section-title-weight: 600;
+  --kg-type-section-title-tracking: 0px;
+  --kg-type-title-size: 14px;
+  --kg-type-title-line-height: 20px;
+  --kg-type-title-weight: 600;
+  --kg-type-title-tracking: 0px;
+  --kg-type-body-size: 14px;
+  --kg-type-body-line-height: 20px;
+  --kg-type-body-weight: 400;
+  --kg-type-body-tracking: 0px;
+  --kg-type-body-secondary-size: 12px;
+  --kg-type-body-secondary-line-height: 18px;
+  --kg-type-body-secondary-weight: 400;
+  --kg-type-body-secondary-tracking: 0px;
+  --kg-type-list-title-size: 14px;
+  --kg-type-list-title-line-height: 20px;
+  --kg-type-list-title-weight: 500;
+  --kg-type-list-title-tracking: 0px;
+  --kg-type-label-size: 14px;
+  --kg-type-label-line-height: 20px;
+  --kg-type-label-weight: 600;
+  --kg-type-label-tracking: 0px;
+  --kg-type-caption-size: 12px;
+  --kg-type-caption-line-height: 16px;
+  --kg-type-caption-weight: 400;
+  --kg-type-caption-tracking: 0px;
+  --kg-type-caption-small-size: 11px;
+  --kg-type-caption-small-line-height: 16px;
+  --kg-type-caption-small-weight: 500;
+  --kg-type-caption-small-tracking: 0px;
+  --kg-metric-minimum-interactive-target: 32px;
+  --kg-metric-control-height: 36px;
+  --kg-metric-compact-control-height: 32px;
+  --kg-metric-list-row-single: 40px;
+  --kg-metric-list-row-double: 52px;
+  --kg-metric-page-gutter: 24px;
+  --kg-metric-section-gap: 24px;
+  --kg-metric-control-gap: 8px;
+  --kg-metric-icon-text-gap: 8px;
 }
 
 :root,
