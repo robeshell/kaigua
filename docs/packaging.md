@@ -32,6 +32,23 @@ pnpm tauri build --debug
 
 未配置证书时，`pnpm build:app` 仍可出未签名包，仅适合本机/内测。
 
+macOS 图标的可编辑母版位于
+`desktop/src-tauri/icons/Kaigua.icon`，通用高分辨率母版为
+`desktop/src-tauri/icons/kaigua_master-v3.png`。Tauri 打包仍读取
+`desktop/src-tauri/icons/icon.icns`。图标背景以开刮默认产品强调色——
+靛蓝 `#6673C7`——为中心生成渐变，不得套用其他产品的珊瑚色。
+
+在 macOS 更新母版后运行：
+
+```bash
+cd desktop
+./scripts/generate-app-icons.sh
+```
+
+脚本先从高分辨率母版同步 Tauri 的跨平台图标，再通过 Xcode
+`actool` 编译 Icon Composer 分层母版并覆盖最终的 macOS
+`icon.icns`。
+
 发布前设置环境变量（示例）：
 
 ```bash
