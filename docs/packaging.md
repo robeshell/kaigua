@@ -36,7 +36,7 @@ macOS 图标的可编辑母版位于
 `desktop/src-tauri/icons/Kaigua.icon`，通用高分辨率母版为
 `desktop/src-tauri/icons/kaigua_master-v3.png`。Tauri 打包仍读取
 `desktop/src-tauri/icons/icon.icns`。图标背景以开刮默认产品强调色——
-靛蓝 `#6673C7`——为中心生成渐变，不得套用其他产品的珊瑚色。
+靛蓝 `#5A66B8`——为中心生成渐变，不得套用其他产品的珊瑚色。
 
 在 macOS 更新母版后运行：
 

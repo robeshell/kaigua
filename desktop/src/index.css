@@ -288,7 +288,7 @@ body {
 }
 
 .kg-tile-btn:disabled {
-  opacity: 0.4;
+  opacity: 0.55;
   cursor: default;
 }
 
@@ -452,7 +452,7 @@ select:focus-visible {
 }
 
 .kg-btn:disabled {
-  opacity: 0.4;
+  opacity: 0.55;
   cursor: not-allowed;
 }
 
@@ -1114,7 +1114,7 @@ select:focus-visible {
 }
 
 .kg-menu-item:disabled {
-  opacity: 0.4;
+  opacity: 0.55;
   cursor: not-allowed;
 }
 

@@ -7,10 +7,11 @@ export type AccentId = "indigo" | "teal" | "sky" | "slate";
 /** @deprecated legacy appearance values — migrated on load */
 type LegacyAppearance = "light" | "dark";
 
+/** Colors match kai-brand-design tokens/accents.json (kaigua). */
 export const ACCENT_PRESETS: { id: AccentId; color: string }[] = [
-  { id: "indigo", color: "#6673C7" },
+  { id: "indigo", color: "#5A66B8" },
   { id: "teal", color: "#3F9E98" },
-  { id: "sky", color: "#0284C7" },
+  { id: "sky", color: "#0177B5" },
   { id: "slate", color: "#475569" },
 ];
 

@@ -22,7 +22,6 @@
   --kg-settings-row-divider: rgb(0 0 0 / 0.04);
   --kg-skeleton-a: rgb(0 0 0 / 0.04);
   --kg-skeleton-b: rgb(0 0 0 / 0.08);
-  --kg-on-accent: #ffffff;
   --kg-destructive-fill: rgb(220 38 38 / 0.08);
   --kg-destructive-hover: rgb(220 38 38 / 0.12);
   --kg-chrome-rail-shadow: 1px 0 6px rgb(0 0 0 / 0.06);
@@ -43,7 +42,6 @@
   --kg-settings-row-divider: rgb(24 32 42 / 0.04);
   --kg-skeleton-a: rgb(24 32 42 / 0.04);
   --kg-skeleton-b: rgb(24 32 42 / 0.08);
-  --kg-on-accent: #ffffff;
   --kg-destructive-fill: rgb(220 38 38 / 0.08);
   --kg-destructive-hover: rgb(220 38 38 / 0.12);
   --kg-chrome-rail-shadow: none;
@@ -64,7 +62,6 @@
   --kg-settings-row-divider: rgb(255 255 255 / 0.05);
   --kg-skeleton-a: rgb(255 255 255 / 0.04);
   --kg-skeleton-b: rgb(255 255 255 / 0.09);
-  --kg-on-accent: #ffffff;
   --kg-destructive-fill: rgb(248 113 113 / 0.12);
   --kg-destructive-hover: rgb(248 113 113 / 0.18);
   --kg-chrome-rail-shadow: 1px 0 6px rgb(0 0 0 / 0.28);

@@ -229,13 +229,13 @@ function SkinCard({
             className="kg-skin-card-half"
             style={
               {
-                "--kg-skin-preview-canvas": "#f7f7f8",
+                "--kg-skin-preview-canvas": "#f7f9fc",
                 "--kg-skin-preview-elevated": "#ffffff",
                 "--kg-skin-preview-border": "rgb(0 0 0 / 0.08)",
                 "--kg-skin-preview-glass-border": "rgb(0 0 0 / 0.07)",
                 "--kg-skin-preview-line": "rgb(28 28 34 / 0.22)",
                 "--kg-skin-preview-line-muted": "rgb(90 90 98 / 0.32)",
-                background: "#f7f7f8",
+                background: "#f7f9fc",
               } as CSSProperties
             }
           >
@@ -283,7 +283,8 @@ function SkinCard({
             lineMuted: "rgb(255 255 255 / 0.32)",
           }
         : {
-            canvas: "#f7f7f8",
+            // Brand default skin canvas / elevated (kai-brand-design skins.json)
+            canvas: "#f7f9fc",
             elevated: "#ffffff",
             border: "rgb(0 0 0 / 0.08)",
             glassBorder: "rgb(0 0 0 / 0.07)",
